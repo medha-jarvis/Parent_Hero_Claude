@@ -94,6 +94,22 @@ The transition happens when a user taps on their Active Focus card. They move fr
 **Unlike** Byju's, Khan Academy, and Duolingo Math, which prescribe their own curriculum
 **Our product** follows your school and makes you the hero of your child's learning journey.
 
+### 2.4 MVP Curriculum Scope
+
+> **Important:** The full product vision covers Grades 1-5, all major subjects, and multiple curriculum boards. The MVP deliberately narrows this to validate the core hypothesis before expanding.
+
+| Dimension | MVP Scope | Phase 2 | Phase 3+ |
+|-----------|-----------|---------|----------|
+| **Board** | CBSE only | + ICSE | + Common Core, IB PYP |
+| **Grades** | 1-3 | 1-4 | 1-5 |
+| **Subject** | Math only | + English | + Science/EVS |
+| **Topics** | ~20 (6-8/grade) | ~60 | ~120-200+ |
+| **Language** | English only | + Hindi scripts | + Tamil, Telugu |
+
+**Rationale:** There is ~95% curriculum overlap in Math across CBSE, ICSE, and Common Core. Starting CBSE-only lets us validate content quality and delivery before investing in board-specific content variations.
+
+> **See also:** `FEATURE_MATRIX.md` for a full feature-by-feature breakdown of MVP vs. Phase 2/3 access.
+
 ---
 
 ## 3. Target Users & Personas
@@ -303,6 +319,39 @@ FLOW: User taps "Upgrade to Pro"
 6. Grace period on failure: 3 days of continued access + daily retry
    └── After 3 days: Downgrade to Free tier. Content preserved, access restricted.
 ```
+
+#### 4.3.4 Content Generation QA Process
+
+Gemini can produce incorrect or low-quality content. This section defines the quality gates before content is served to users.
+
+**Math (Auto-verifiable):**
+1. For every generated numeric question, the answer is independently computed by Cloud Function code.
+2. If the computed answer ≠ Gemini's answer: the question is auto-discarded.
+3. If the question has no unique numeric answer (e.g., open-ended): it is discarded and Gemini is prompted to regenerate.
+4. Target: 100% of served Math questions are programmatically verified.
+
+**English & Science (Heuristic-verifiable — Phase 2):**
+English and Science content cannot be auto-graded the same way. The following heuristics are applied:
+
+| Check | Method | Threshold |
+|-------|--------|-----------|
+| Script length | Character count | 150-600 chars per card; discard if outside range |
+| Question has an unambiguous correct answer | Answer key included in prompt; validate answer is in options list | Required |
+| No repeated words across options (MCQ) | String comparison | Required |
+| No PII or inappropriate content | Gemini safety filters (BLOCK_MEDIUM_AND_ABOVE) | Required |
+| Curriculum alignment | Topic keyword must appear in script/question | Required |
+
+**Human Review SLA:**
+- All content for new topics is flagged for review before being served to more than 50 users.
+- Review checklist: factual accuracy, age-appropriateness, curriculum alignment, script length, clarity.
+- Content passes human review → `is_reviewed: true` in `content_cache`.
+- In MVP: Founder does all review manually (~5 min/topic). Automated heuristics reduce manual load in Phase 2.
+
+**Content Pool Size:**
+- Practice Pad: 50 questions generated per topic; 10 randomly selected per session.
+- Quiz: 30 questions generated; 10 randomly selected per Quiz session.
+- Daily Spark: 5 riddles + 5 stories + 5 activities generated; 1 of each shown per day (rotated).
+- Prevents repetition for users who replay the same Campaign.
 
 ---
 
@@ -1293,19 +1342,96 @@ Based on [CBSE] Grade [1] curriculum:
 
 **Entry:** Bottom navigation → [⚙️ Settings] gear icon OR Dashboard top-right gear.
 
-**Sections:**
+**MVP Scope:** Account, Child Profiles, Notifications, Subscription, Accessibility (basic), About. Sound Effects and Offline Content added in Phase 2.
 
-| Setting | Options | Notes |
-|---------|---------|-------|
-| **Child Profiles** | View/Edit/Add children | Name, Grade, Board per child |
-| **Subscription** | Current plan, Upgrade, Manage billing | Links to Stripe/Razorpay portal |
-| **Notifications** | Daily Spark time, Campaign reminders ON/OFF, Streak reminders ON/OFF | Default: 7 AM, all ON |
-| **Accessibility** | Dyslexia-friendly font ON/OFF, Text size (Normal/Large/XL) | Affects child-facing screens |
-| **Sound Effects** | ON/OFF, Volume | For Arcade, Practice Pad, celebrations |
-| **Offline Content** | "Download content for offline use," storage used | Manual trigger to pre-download |
-| **Car Mode Quick Access** | Enable swipe-right gesture for Car Mode | Default: ON |
-| **Account** | Sign out, Delete account, Export data | GDPR/DPDP compliance |
-| **About** | Version, Terms, Privacy Policy, Contact support | |
+---
+
+#### K.1 Account
+
+| Sub-setting | UI | Notes |
+|-------------|-----|-------|
+| **Display Name** | Editable text field | Parent's name; optional but shown in certificate copy |
+| **Phone / Email** | Read-only with "Change" link | Triggers re-auth flow before change |
+| **Sign Out** | Destructive button | Shows confirmation dialog |
+| **Delete Account** | Destructive button (red) | Confirmation dialog + "This will delete all your data and cannot be undone." → Requires typing "DELETE" to confirm → Deletes Firestore user doc + child docs within 30 days (DPDP/GDPR) |
+| **Export My Data** | Action button | Generates JSON export of all user + child + progress data; delivered via email |
+| **View Data We Collect** | Info link | Opens in-app web view of Children's Privacy Addendum |
+
+#### K.2 Child Profiles
+
+Shown as cards (one per child). Each card shows: Name · Grade · Board · Current Campaign (if any).
+
+| Action | UI | Notes |
+|--------|----|-------|
+| **Edit child** | Tap card → edit form | Name, Grade (dropdown 1-5), Board (dropdown CBSE/ICSE/…) |
+| **Switch active child** | Tap "Make Active" on card | Changes Dashboard to show this child's data; streak/XP are per-child |
+| **Delete child** | Long-press card → "Delete [Name]'s profile" | Confirmation dialog; deletes child's Firestore data; Campaign progress and certificates NOT recoverable |
+| **Add child** | [+ Add another child] button | Same onboarding form as initial setup |
+
+**MVP note:** Only 1 child profile in MVP. Multi-child UI is Phase 3. The child management section is still shown in MVP for editing the single profile.
+
+#### K.3 Notifications
+
+| Setting | Default | Options |
+|---------|---------|---------|
+| **Daily Campaign Reminder** | ON | ON / OFF |
+| **Reminder time** | 7:00 PM | Time picker (30-min increments, 6 AM – 10 PM) |
+| **Streak Nudge** | ON (Phase 2) | ON / OFF — only shown once Streak feature ships |
+| **Weekly Progress Summary** | ON (Phase 3) | ON / OFF — Phase 3 feature |
+| **Milestone Alerts** | ON | ON / OFF — fires on Campaign completion, Level Up |
+
+**Implementation:** All notifications use `flutter_local_notifications`. Reminder time stored in user Firestore doc (`notification_time` field). Cloud Function respects user's timezone (stored in `timezone` field from device locale).
+
+#### K.4 Subscription
+
+| State | UI Shown |
+|-------|---------|
+| **Free user** | Current plan: Free · [Upgrade to Pro] CTA |
+| **Pro (monthly)** | Current plan: Pro Monthly · Renews on [date] · [Manage Billing] · [Cancel] |
+| **Pro (annual)** | Current plan: Pro Annual · Renews on [date] · [Manage Billing] · [Cancel] |
+| **Expired / grace** | Current plan: Pro (expires soon) · [Update Payment Method] |
+
+- "Manage Billing" deep-links to Razorpay / Stripe customer portal.
+- "Cancel" triggers: confirmation dialog → "Your Pro access continues until [renewal date], then switches to Free." → calls Stripe/Razorpay cancellation API → sets `cancel_at_period_end: true` in Firestore.
+- Cancelled subscriptions still show active until period end; no immediate downgrade.
+
+#### K.5 Accessibility
+
+| Setting | Default | Options | Phase |
+|---------|---------|---------|-------|
+| **Dyslexia-Friendly Font** | OFF | ON / OFF (applies OpenDyslexic to child-facing screens) | MVP |
+| **Text Size** | Normal | Normal / Large / XL | MVP |
+| **TTS Speed** | 1.0x | 0.75x / 1.0x / 1.25x / 1.5x (slider) | MVP |
+| **High Contrast Mode** | OFF | ON / OFF | Phase 2 |
+| **Reduce Animations** | OFF | ON / OFF | Phase 2 |
+
+**TTS Speed:** Stored in `accessibility.tts_speed` in Firestore user doc. Applied globally to all TTS calls (`flutter_tts` rate parameter).
+
+#### K.6 Sound Effects
+
+| Setting | Default | Notes | Phase |
+|---------|---------|-------|-------|
+| **Sound Effects** | ON | Toggle for all game sounds, celebration sounds | Phase 2 |
+| **Volume** | 80% | Slider (0-100%) | Phase 2 |
+
+#### K.7 Offline Content (Phase 2)
+
+| Setting | Notes |
+|---------|-------|
+| **Pre-download Active Campaign** | Downloads all 5 days of content for current campaign to Hive cache |
+| **Storage Used** | "X MB of offline content stored" |
+| **Clear Offline Cache** | Frees storage; content re-downloads on next Campaign open |
+
+#### K.8 About
+
+| Item | Content |
+|------|---------|
+| **App Version** | "ParentHero v[x.y.z] (build [n])" |
+| **Privacy Policy** | Opens in-app web view |
+| **Terms of Service** | Opens in-app web view |
+| **Contact Support** | Opens email client: support@parenthero.app |
+| **Rate Us** | Deep link to Play Store / App Store review prompt |
+| **Share App** | Native share sheet with referral link |
 
 ---
 
@@ -1391,6 +1517,49 @@ Install → Paid:                    ~3-5%
 - Required Paid Users: 5,000
 - At 4% Install-to-Paid: Need 125,000 installs
 - At 3% Install-to-Paid: Need 167,000 installs
+
+### 8.5 Paywall UX: Soft Gate Mechanics
+
+The Day 4 paywall uses a **soft gate** (preview → prompt) rather than a hard block. This respects the user's experience while driving conversion.
+
+**Soft Gate Flow:**
+```
+User taps "Start Day 4" →
+  Show Day 4 content normally for 2 minutes (exactly 2 campaign steps)
+  → Pause with overlay: "You're on a roll! [Child name] is mastering [Topic]."
+  → Show paywall sheet (bottom sheet, non-dismissible):
+      "Unlock Day 4 & 5 — the Legend Quiz and your Certificate await."
+      [₹299/month]  [₹1,999/year — Save 44%]
+      [Restore Purchase]
+  → If user closes: return to Dashboard with banner "Day 4 unlocked when you go Pro"
+```
+
+**Paywall Sheet Design:**
+- Child's name and topic used in copy (personalized)
+- Show what's locked: Day 4 script thumbnail + "Legend Quiz" + "Certificate Preview"
+- Annual plan highlighted with "Most Popular" badge and savings amount
+- No close button — only "Maybe Later" text link (bottom)
+- "Maybe Later" fires `paywall_dismissed` analytics event and returns to Dashboard
+
+**Hard Gate (fallback):** If user somehow reaches Day 4 content without triggering the soft gate (e.g., direct deep link), immediately redirect to paywall with no preview.
+
+### 8.6 Downgrade & Grace Period Behavior
+
+When a subscription fails renewal or is cancelled:
+
+| Day | Action | User Experience |
+|-----|--------|----------------|
+| Day 0 (failure) | Payment fails; retry once after 6 hours | No user impact |
+| Day 1 | Retry. In-app banner shown | "Trouble with your payment. Tap to update." |
+| Day 2 | Retry. Push notification sent | "Your Pro access expires tomorrow. Update payment." |
+| Day 3 | Retry. Final warning in-app | "Last chance: update your payment to keep Pro." |
+| Day 4 | Downgrade to Free tier | "Your Pro subscription has ended. [Renew] [View Free Plan]" |
+
+**What happens to data on downgrade:**
+- All completed Campaign progress and certificates: **preserved** (never deleted)
+- Active Campaign in progress: **visible but Day 4+ locked** (must re-subscribe to continue)
+- Streak and XP: **preserved** (shown, but streak freeze feature disabled)
+- User can re-subscribe anytime and immediately regain Pro access
 
 ---
 
@@ -1757,67 +1926,84 @@ Every external dependency has a defined fallback behavior.
 
 ## 15. Launch Roadmap & Phasing
 
-### Phase 1: MVP (Weeks 1-8)
+### Phase 1: MVP (Weeks 3-10)
 
-**Goal:** Launch a functional app with core Campaign flow for CBSE + ICSE Grade 1-3 Math.
+> **Scope aligned with `NEXT_STEPS.md` Phase 1 and `FEATURE_MATRIX.md`.** Previous versions of this section included Scan Diary, Streak System, XP/Levels, ICSE, and Worksheet in MVP. These have been moved to Phase 2-3 to keep the MVP focused on proving the core hypothesis.
+
+**Goal:** Prove the core hypothesis — "Parents will use teaching scripts + guided practice aligned to their school curriculum" — using CBSE Grade 1-3 Math only. Build the minimum viable loop: Onboarding → Campaign → Script → Practice → Quiz → Certificate → Paywall.
 
 **Included:**
-- Onboarding + First Topic Wizard
-- Dashboard (Hero Card + "What Kids Are Learning" with curriculum fallback + Library)
-- Campaign Day View (5-Day flow, linear guided)
-- Teaching Script (Decode)
-- Practice Pad (Math -- numeric input + whiteboard)
-- Basic Quiz (MCQ + Numeric)
-- Sunday Printer (Certificate + Worksheet)
-- Scan Diary (basic OCR → topic detection)
-- Guest Mode + Lazy Auth
-- Streak System
-- XP / Levels (basic)
-- Free + Pro tiers
-- Payment (Razorpay for India only)
-- Offline caching (Practice Pad)
-- Firebase Analytics (core events)
+- Onboarding (name, grade, board; browse-only topic wizard — NO scan)
+- Dashboard (Hero Card + hardcoded "What Kids Are Learning" + Library grid)
+- Campaign Day View (5-day linear flow; no bonus activities section)
+- Teaching Script (static display + TTS via `flutter_tts`)
+- Practice Pad (Math only — numeric input + multiple choice; 10 questions/session)
+- Basic Quiz (MCQ, 10 questions, correct/wrong feedback; no explanation sheet)
+- Certificate (simple PDF — child name + topic + date; shareable as image)
+- Guest Mode + Lazy Auth (Google Sign-In only; phone OTP in Phase 2)
+- Free + Pro tiers (Campaign gated at Day 4)
+- Payment (Razorpay India only)
+- Firebase Analytics (core events — see Section 11.2)
 
-**Not Included (deferred):**
-- English and Science modules
-- Arcade
-- Car Mode
-- Beat the Parent
-- Report Card (full)
-- Revision Ring
-- Multi-child
-- Stripe (international)
-- Daily Spark (varied content)
-- Accessibility options
+**Not Included in MVP (deferred):**
+- Scan Diary / OCR → Phase 3
+- Streak System → Phase 2
+- XP / Levels → Phase 2
+- Offline mode → Phase 3
+- Whiteboard in Practice Pad → Phase 2
+- Worksheet PDF → Phase 2
+- ICSE / Common Core / IB PYP curriculum → Phase 2-3
+- English and Science modules → Phase 2-3
+- Arcade → Phase 2
+- Car Mode → Phase 2
+- Beat the Parent → Phase 2
+- Report Card (full) → Phase 2
+- Revision Ring → Phase 3
+- Multi-child → Phase 3
+- Stripe (international payments) → Phase 3
+- Daily Spark varied content → Phase 2
+- Accessibility options (dyslexia font, high contrast) → Phase 2
+- Phone OTP auth → Phase 2
 
-### Phase 2: Engagement (Weeks 9-14)
+**Why this cut?** Every deferred feature delays learning whether the core loop works. Gamification, Car Mode, and OCR are all engagement amplifiers — but only valuable if the core script + practice loop has been validated first.
 
-**Goal:** Increase retention and session duration.
+### Phase 2: Engagement (Weeks 11-20)
 
-**Added:**
-- Arcade (Number Rush for Math)
-- Car Mode (Mental Math DJ)
-- Daily Spark (full rotation)
-- Beat the Parent (async)
-- Report Card (full with charts)
-- English module (Practice Pad with Word Bank + Quiz)
+**Goal:** Increase retention, session duration, and conversion. Add features proven by Phase 1 data to be high-priority.
+
+**Added (based on expected impact on retention):**
+- Streak System (easiest to build; highest retention impact)
+- Arcade: Number Rush for Math (drives session duration)
+- Daily Spark (full rotation — riddles, stories, activities)
+- Beat the Parent (async async quiz)
+- Car Mode (unique differentiator; offline audio)
+- Report Card (full with charts — shows parents value)
+- XP / Levels (progression system for kids)
+- Scan Diary / OCR (reduces friction for topic selection)
+- Kid Mode (navigation lock for child safety)
+- Worksheet PDF (Sunday Printer expanded)
+- English module (Practice Pad + Word Builder Arcade)
 - CBSE + ICSE Grade 1-5 Math + English curriculum data
+- Phone OTP auth (primary auth for India)
+- Stripe (international payments)
+- Accessibility options (dyslexia font, TTS speed, high contrast)
+- Offline mode (full offline caching for child activities)
 
-### Phase 3: Growth (Weeks 15-20)
+### Phase 3: Growth (Weeks 21-30)
 
-**Goal:** Expand content and payment. Drive toward $20K MRR.
+**Goal:** Expand content and geography. Drive toward $20K MRR.
 
 **Added:**
 - Science/EVS module (Practice Pad with Image Labeling + Sort It! Arcade)
 - Revision Ring (spaced repetition)
 - Multi-child switching
-- Stripe (international payments)
 - Word Builder Arcade (English)
 - Sort It! Arcade (Science)
 - Hindi localization (scripts and explanations)
 - Common Core curriculum data (US market)
+- IB PYP curriculum data
 
-### Phase 4: Scale (Weeks 21+)
+### Phase 4: Scale (Weeks 31+)
 
 **Goal:** Market expansion and optimization.
 

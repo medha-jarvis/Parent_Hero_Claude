@@ -714,4 +714,175 @@ BOARD_CONTEXT = {
 
 ---
 
+## Part 7: Curriculum Data Schema
+
+The "universal topic library with board-specific metadata" strategy requires a well-defined data structure. This section defines the Firestore schema for curriculum data.
+
+### 7.1 Topic Document Schema (`curriculum_topics` collection)
+
+Each document in `curriculum_topics` represents one teachable topic (e.g., "Addition", "Nouns", "Plants").
+
+```json
+{
+  "topicId": "math-addition-grade1",
+  "subject": "math",
+  "grade": 1,
+  "displayName": "Addition",
+  "description": "Adding two single-digit numbers to get sums up to 20",
+  "prerequisiteTopics": [],
+  "campaignDays": 5,
+  "boards": {
+    "cbse": {
+      "unit": "Numbers",
+      "chapter": "Addition",
+      "sequenceWeek": 5,
+      "terminology": "sum",
+      "inScope": true
+    },
+    "icse": {
+      "unit": "Numbers",
+      "chapter": "Addition and Subtraction",
+      "sequenceWeek": 4,
+      "terminology": "sum",
+      "inScope": true
+    },
+    "commonCore": {
+      "standard": "1.OA.A.1",
+      "unit": "Operations and Algebraic Thinking",
+      "sequenceWeek": 6,
+      "terminology": "sum",
+      "inScope": true
+    },
+    "ibpyp": {
+      "transdisciplinaryTheme": "How the World Works",
+      "sequenceWeek": 5,
+      "terminology": "sum",
+      "inScope": true
+    }
+  },
+  "tags": ["addition", "numbers", "arithmetic", "grade1-math"],
+  "popularityScore": 0,
+  "contentGenerated": false,
+  "contentCacheId": null,
+  "lastGenerated": null,
+  "isReviewed": false,
+  "createdAt": "2026-03-16T00:00:00Z"
+}
+```
+
+**Field Definitions:**
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `topicId` | string | Yes | Slug format: `{subject}-{topic-slug}-grade{n}`. Must be unique. |
+| `subject` | enum | Yes | `"math"` / `"english"` / `"science"` |
+| `grade` | int | Yes | 1–5 |
+| `displayName` | string | Yes | Human-readable topic name shown in Library |
+| `description` | string | Yes | 1-sentence description for Library card subtitle |
+| `prerequisiteTopics` | array\<string\> | No | List of `topicId`s that should ideally be mastered first; used for Campaign recommendations |
+| `campaignDays` | int | Yes | Always 5 for MVP |
+| `boards.{board}.inScope` | bool | Yes | If `false`, topic is hidden from users who selected that board |
+| `boards.{board}.sequenceWeek` | int | No | Approximate school week when this topic is taught; used for "What Kids Are Learning" ranking |
+| `boards.{board}.terminology` | string | No | Board-specific word (e.g., "carrying" vs. "regrouping" for addition with carrying) |
+| `tags` | array\<string\> | No | For search and related-topic recommendations |
+| `popularityScore` | int | No | Updated hourly by Cloud Function (count of active campaigns for this topic) |
+| `contentGenerated` | bool | Yes | Set to `true` after `content_cache` entry exists |
+| `contentCacheId` | string | No | Reference to `content_cache` document ID |
+| `isReviewed` | bool | Yes | Set to `true` after human content review |
+
+### 7.2 Content Cache Document Schema (`content_cache` collection)
+
+One document per unique `(topicId, grade, board)` combination. Shared across all users who pin the same topic.
+
+```json
+{
+  "cacheId": "math-addition-grade1-cbse",
+  "topicId": "math-addition-grade1",
+  "grade": 1,
+  "board": "cbse",
+  "generatedAt": "2026-03-16T10:00:00Z",
+  "generatedByModel": "gemini-3-pro",
+  "isReviewed": false,
+  "reviewedAt": null,
+  "reviewedBy": null,
+  "decodeScript": {
+    "cards": [
+      {
+        "cardIndex": 1,
+        "text": "Adding means putting groups together to find the total.",
+        "durationEstimateSeconds": 15
+      }
+    ],
+    "ifStrugglingBlock": "Try counting out the first number with fingers, then counting on from there.",
+    "totalCards": 5
+  },
+  "practicePadQuestions": [
+    {
+      "questionId": "pq-001",
+      "text": "3 + 4 = ?",
+      "answerType": "numeric",
+      "correctAnswer": 7,
+      "difficulty": "easy",
+      "options": null,
+      "childExplanation": "Count on from 3: 4, 5, 6, 7! The answer is 7.",
+      "parentExplanation": "Your child may count all objects from 1. Encourage 'counting on' from the larger number for efficiency."
+    }
+  ],
+  "quizQuestions": [],
+  "dailyContent": {
+    "riddles": [],
+    "stories": [],
+    "activities": []
+  },
+  "arcadeContent": {}
+}
+```
+
+### 7.3 Worked Examples (MVP Seed Topics)
+
+The following 20 topics should be seeded in Firestore before MVP launch. All are CBSE Grade 1-3 Math.
+
+| topicId | Grade | displayName | Sequence Week |
+|---------|-------|-------------|--------------|
+| `math-counting-to-10-grade1` | 1 | Counting to 10 | 1 |
+| `math-counting-to-20-grade1` | 1 | Counting to 20 | 2 |
+| `math-addition-grade1` | 1 | Addition (within 10) | 5 |
+| `math-subtraction-grade1` | 1 | Subtraction (within 10) | 8 |
+| `math-shapes-2d-grade1` | 1 | 2D Shapes | 12 |
+| `math-measurement-length-grade1` | 1 | Measurement: Length | 15 |
+| `math-addition-to-100-grade2` | 2 | Addition (within 100) | 3 |
+| `math-subtraction-to-100-grade2` | 2 | Subtraction (within 100) | 6 |
+| `math-multiplication-intro-grade2` | 2 | Introduction to Multiplication | 10 |
+| `math-division-intro-grade2` | 2 | Introduction to Division | 14 |
+| `math-measurement-weight-grade2` | 2 | Measurement: Weight | 18 |
+| `math-time-clock-grade2` | 2 | Telling Time | 20 |
+| `math-multiplication-tables-grade3` | 3 | Multiplication Tables (2-10) | 4 |
+| `math-division-grade3` | 3 | Division | 8 |
+| `math-fractions-intro-grade3` | 3 | Introduction to Fractions | 12 |
+| `math-geometry-perimeter-grade3` | 3 | Perimeter of Shapes | 16 |
+| `math-money-grade3` | 3 | Money and Transactions | 18 |
+| `math-data-handling-grade3` | 3 | Data Handling (Bar Graphs) | 22 |
+| `math-word-problems-addition-grade3` | 3 | Word Problems: Addition & Subtraction | 24 |
+| `math-patterns-grade3` | 3 | Patterns and Sequences | 26 |
+
+**Content Generation Cost for 20 MVP Topics:**
+- Cost per topic: 5 AI calls × $0.002/call = **$0.01/topic**
+- 20 topics × $0.01 = **$0.20 total one-time cost**
+- After caching: $0 for subsequent users pinning the same topic
+
+### 7.4 EVS vs. Science Clarification
+
+The subject split for CBSE (which uses "EVS" for Grades 1-5) differs from ICSE and Common Core which separate Science and Social Studies:
+
+| Board | Grades 1-5 Subject | Content |
+|-------|-------------------|---------|
+| CBSE | EVS (Environmental Studies) | Science + Social Studies blended |
+| ICSE | Science (separate) + Social Studies (separate) | Two distinct subjects |
+| Common Core | Science (NGSS-aligned) | Science only; no blended Social Studies |
+| IB PYP | Integrated thematic | Science + Social Studies via transdisciplinary themes |
+
+**ParentHero approach:** We use "Science/EVS" as a combined subject label in the app UI for all boards. Topics that are CBSE-EVS but skew heavily toward Social Studies (e.g., "Our Community", "Indian Festivals") are tagged `subject: "evs_social"` and can be filtered independently. ICSE and Common Core users see these topics hidden by default (their `boards.icse.inScope = false`).
+
+---
+
 *End of Curriculum Research Document*

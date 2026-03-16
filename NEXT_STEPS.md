@@ -1,6 +1,14 @@
 # ParentHero -- What To Do Next (Action Plan)
 
 **Date:** February 10, 2026
+**Last reviewed:** March 16, 2026
+
+> **Document alignment:** This file defines the actionable roadmap. Feature scope and access tiers are the source of truth in:
+> - `FEATURE_MATRIX.md` — full feature-by-feature breakdown (MVP vs. Phase 2/3, Free vs. Pro)
+> - `PARENTHERO_PRD_v9.md` — product specs (Section 15 for phased roadmap, Section 11.2 for analytics events)
+> - `CURRICULUM_RESEARCH.md` — curriculum schema and MVP topic seed list (Part 7)
+>
+> If you find contradictions between this file and those, defer to `FEATURE_MATRIX.md` and the PRD.
 
 ---
 
@@ -152,8 +160,9 @@ Your PRD has 11 modules. Your MVP needs 5.
 
 3. **Seed the curriculum data**
    - Start with: CBSE Grade 1-3, Math only (6-8 topics per grade = ~20 topics total)
-   - Manually create the `curriculum_maps` JSON
-   - Upload to Firestore
+   - Use the Firestore schema defined in `CURRICULUM_RESEARCH.md` Part 7.1
+   - The full list of 20 seed topics with `topicId`s is in `CURRICULUM_RESEARCH.md` Part 7.3
+   - Upload to Firestore `curriculum_topics` collection
 
 4. **Pre-generate content for all 20 topics**
    - Write a script that calls Gemini for each topic
@@ -180,7 +189,7 @@ Your PRD has 11 modules. Your MVP needs 5.
 - Test full flow yourself 10+ times
 - Get 5 parents from Phase 0 to test (give them free Pro access)
 - Fix critical bugs
-- Confirm Analytics events are firing
+- Confirm Analytics events are firing (see PRD Section 11.2 for the full event taxonomy)
 
 ---
 

@@ -219,3 +219,28 @@ I'll score each content type on three axes:
 The 20% gap is primarily in **presentation** (scripts need to be cards not walls, visuals need to be inline) and **engagement mechanics** (Arcade needs game-loop depth, Daily Spark needs serialized stories, Practice Pad needs format variety). These are not content quality problems -- the quality is high. They're UX/interaction design problems that sit ON TOP of the content.
 
 **If you ship this content with the presentation fixes above, you have a product that's meaningfully better than anything in the Indian edtech market for the Grade 1-5 parent segment.**
+
+---
+
+## Appendix: Resolved Questions from This Evaluation
+
+The following questions raised during content evaluation have been resolved in other documents. Recorded here for traceability.
+
+### Q: Is Practice Pad limited to 10 questions for free users?
+**Resolved:** Yes. Free users: 10 questions per session (from a pool of 50 generated). Pro users: unlimited sessions drawing from the same 50-question pool. See `FEATURE_MATRIX.md` (Module E) and PRD Section 8.1.
+
+### Q: Is Day 4 the paywall or Day 3?
+**Resolved:** Day 4. Free users get full Days 1-3. The paywall is a **soft gate** at Day 3 → Day 4 transition (2-minute preview before the prompt). See PRD Section 8.5 for the soft gate UX flow.
+
+### Q: Does pre-generation conflict with adaptive content for struggling students?
+**Status:** Tension acknowledged, not fully resolved.
+
+The content is pre-generated and cached per `(topic, grade, board)` — so it is the same for every user. The "If Struggling" fallback block is a single static addition to the script, not dynamically adapted to the child's actual performance.
+
+**Practical resolution for MVP:** Static "If Struggling" block is sufficient. True adaptive difficulty (branching based on session performance) is deferred to Phase 3+ when we have enough user data to know what branches to create. The 50-question pool + 10-question random selection already provides light variation.
+
+### Q: How many question variants are generated to prevent content exhaustion on repeat plays?
+**Resolved:** 50 Practice Pad questions generated per topic (10 randomly selected per session), 30 Quiz questions (10 randomly selected per quiz). See PRD Section 4.3.4 (Content Generation QA Process).
+
+### Q: How do we prevent factual errors in Science and English scripts?
+**Resolved:** Heuristic QA checks + human review (founder review for the first 50 users per topic). See PRD Section 4.3.4 for the full QA process, including length checks, answer-key validation, and content pool strategy.
