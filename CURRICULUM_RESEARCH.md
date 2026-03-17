@@ -865,9 +865,12 @@ The following 20 topics should be seeded in Firestore before MVP launch. All are
 | `math-word-problems-addition-grade3` | 3 | Word Problems: Addition & Subtraction | 24 |
 | `math-patterns-grade3` | 3 | Patterns and Sequences | 26 |
 
-**Content Generation Cost for 20 MVP Topics:**
+**Content Generation Cost — Full Phase 1 Build:**
 - Cost per topic: 5 AI calls × $0.002/call = **$0.01/topic**
-- 20 topics × $0.01 = **$0.20 total one-time cost**
+- Sprint A: ~20 topics (CBSE G1-3 Math) = **$0.20**
+- Sprint B: ~50 additional topics (+ ICSE, + English, G1-4) = **$0.50**
+- Sprint C: ~80 additional topics (+ Common Core, IB PYP, Science, G1-5) = **$0.80**
+- **Total pre-launch content generation: ~$1.50**
 - After caching: $0 for subsequent users pinning the same topic
 
 ### 7.4 EVS vs. Science Clarification

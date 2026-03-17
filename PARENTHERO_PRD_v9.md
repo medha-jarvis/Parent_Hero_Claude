@@ -94,21 +94,21 @@ The transition happens when a user taps on their Active Focus card. They move fr
 **Unlike** Byju's, Khan Academy, and Duolingo Math, which prescribe their own curriculum
 **Our product** follows your school and makes you the hero of your child's learning journey.
 
-### 2.4 MVP Curriculum Scope
+### 2.4 Phase 1 Curriculum Build Order
 
-> **Important:** The full product vision covers Grades 1-5, all major subjects, and multiple curriculum boards. The MVP deliberately narrows this to validate the core hypothesis before expanding.
+> **Phase 1 = the complete base product, built before launch.** There is no separate "MVP" launch — the full feature set ships. Within Phase 1, content is built in three sprints (A → B → C), expanding boards, grades, and subjects each sprint.
 
-| Dimension | MVP Scope | Phase 2 | Phase 3+ |
-|-----------|-----------|---------|----------|
+| Dimension | Sprint A (Weeks 3-10) | Sprint B (Weeks 11-18) | Sprint C (Weeks 19-26) |
+|-----------|----------------------|----------------------|----------------------|
 | **Board** | CBSE only | + ICSE | + Common Core, IB PYP |
 | **Grades** | 1-3 | 1-4 | 1-5 |
 | **Subject** | Math only | + English | + Science/EVS |
-| **Topics** | ~20 (6-8/grade) | ~60 | ~120-200+ |
-| **Language** | English only | + Hindi scripts | + Tamil, Telugu |
+| **Topics** | ~20 | ~70 | ~150 |
+| **Language** | English only | + Hindi scripts | English UI only (Hindi/Tamil UI in Phase 2) |
 
-**Rationale:** There is ~95% curriculum overlap in Math across CBSE, ICSE, and Common Core. Starting CBSE-only lets us validate content quality and delivery before investing in board-specific content variations.
+**Rationale:** Sprints sequence content complexity, not feature completeness. The app's core interaction (teaching script + practice pad + quiz + certificate) works for all boards/subjects — only the content needs to be generated and QA'd for each expansion.
 
-> **See also:** `FEATURE_MATRIX.md` for a full feature-by-feature breakdown of MVP vs. Phase 2/3 access.
+> **See also:** `FEATURE_MATRIX.md` for a full feature-by-feature breakdown of Phase 1 vs. Phase 2 and Free vs. Pro access.
 
 ---
 
@@ -1926,95 +1926,90 @@ Every external dependency has a defined fallback behavior.
 
 ## 15. Launch Roadmap & Phasing
 
-### Phase 1: MVP (Weeks 3-10)
+> **Two phases only.** Phase 1 = the complete base product (all features, all subjects, all boards except state boards) built before launch. Phase 2 = post-launch scaling. See `FEATURE_MATRIX.md` for feature-level detail.
 
-> **Scope aligned with `NEXT_STEPS.md` Phase 1 and `FEATURE_MATRIX.md`.** Previous versions of this section included Scan Diary, Streak System, XP/Levels, ICSE, and Worksheet in MVP. These have been moved to Phase 2-3 to keep the MVP focused on proving the core hypothesis.
+### Phase 1: Base Product (Weeks 3-26, pre-launch)
 
-**Goal:** Prove the core hypothesis — "Parents will use teaching scripts + guided practice aligned to their school curriculum" — using CBSE Grade 1-3 Math only. Build the minimum viable loop: Onboarding → Campaign → Script → Practice → Quiz → Certificate → Paywall.
+**Goal:** Build the complete product — all modules, all subjects, all major boards, all engagement features — before launch. Launch once with a full product rather than iterating publicly from a stripped-down MVP.
 
-**Included:**
-- Onboarding (name, grade, board; browse-only topic wizard — NO scan)
-- Dashboard (Hero Card + hardcoded "What Kids Are Learning" + Library grid)
-- Campaign Day View (5-day linear flow; no bonus activities section)
-- Teaching Script (static display + TTS via `flutter_tts`)
-- Practice Pad (Math only — numeric input + multiple choice; 10 questions/session)
-- Basic Quiz (MCQ, 10 questions, correct/wrong feedback; no explanation sheet)
-- Certificate (simple PDF — child name + topic + date; shareable as image)
-- Guest Mode + Lazy Auth (Google Sign-In only; phone OTP in Phase 2)
-- Free + Pro tiers (Campaign gated at Day 4)
-- Payment (Razorpay India only)
-- Firebase Analytics (core events — see Section 11.2)
+Phase 1 is divided into three internal build sprints:
 
-**Not Included in MVP (deferred):**
-- Scan Diary / OCR → Phase 3
-- Streak System → Phase 2
-- XP / Levels → Phase 2
-- Offline mode → Phase 3
-- Whiteboard in Practice Pad → Phase 2
-- Worksheet PDF → Phase 2
-- ICSE / Common Core / IB PYP curriculum → Phase 2-3
-- English and Science modules → Phase 2-3
-- Arcade → Phase 2
-- Car Mode → Phase 2
-- Beat the Parent → Phase 2
-- Report Card (full) → Phase 2
-- Revision Ring → Phase 3
-- Multi-child → Phase 3
-- Stripe (international payments) → Phase 3
-- Daily Spark varied content → Phase 2
-- Accessibility options (dyslexia font, high contrast) → Phase 2
-- Phone OTP auth → Phase 2
+#### Sprint A — Core Loop (Weeks 3-10)
+*Prove the interaction model works before building breadth.*
 
-**Why this cut?** Every deferred feature delays learning whether the core loop works. Gamification, Car Mode, and OCR are all engagement amplifiers — but only valuable if the core script + practice loop has been validated first.
+| Area | What ships |
+|------|-----------|
+| **Auth** | Google Sign-In + Guest Mode |
+| **Onboarding** | Name, grade, board (CBSE only); browse-only topic wizard |
+| **Dashboard** | Hero Card + hardcoded "What Kids Are Learning" + Library grid |
+| **Campaign** | 5-day linear flow; Days 1-3 free, Day 4-5 Pro |
+| **Teaching Script** | Tappable cards + TTS narration |
+| **Practice Pad** | Math only; numeric input + MCQ; 10 Qs/session (free), unlimited (Pro) |
+| **Basic Quiz** | MCQ, 10 questions, dual explanation on wrong answer |
+| **Certificate** | PDF — name + topic + date; shareable image |
+| **Payments** | Razorpay India (monthly + annual) |
+| **Settings** | Account, notifications, accessibility basics |
+| **Analytics** | Core Firebase Analytics events (see Section 11.2) |
+| **Content** | CBSE Grade 1-3 Math (~20 topics, pre-generated + QA'd) |
 
-### Phase 2: Engagement (Weeks 11-20)
+#### Sprint B — Engagement + Content Depth (Weeks 11-18)
+*Add retention mechanics and expand to all subjects + engagement features.*
 
-**Goal:** Increase retention, session duration, and conversion. Add features proven by Phase 1 data to be high-priority.
+| Area | What ships |
+|------|-----------|
+| **Auth** | Phone OTP (primary India auth) |
+| **Streak + XP** | Daily streak, XP per action, level-up celebration, streak freeze (Pro) |
+| **Arcade** | Number Rush (Math) + Word Builder (English); 3 plays/day free, unlimited Pro |
+| **Beat the Parent** | Async quiz; reveal moment; shareable image |
+| **Car Mode** | Audio-only script playback (Pro) |
+| **Report Card** | Campaign history + mastery chart (Pro) |
+| **Kid Mode** | Large touch targets, navigation lock, parent PIN exit |
+| **Daily Spark** | Full rotation — riddles, stories, activities (5 per type) |
+| **Whiteboard** | Drawing canvas in Practice Pad |
+| **Inline visuals** | Emoji diagrams in teaching scripts |
+| **Worksheet PDF** | Sunday Printer |
+| **Payments** | Stripe (international); family plans |
+| **Offline mode** | Full offline caching for all child-facing activities |
+| **Accessibility** | High contrast, export my data |
+| **Content** | CBSE + ICSE Grade 1-4, Math + English (~70 topics) |
 
-**Added (based on expected impact on retention):**
-- Streak System (easiest to build; highest retention impact)
-- Arcade: Number Rush for Math (drives session duration)
-- Daily Spark (full rotation — riddles, stories, activities)
-- Beat the Parent (async async quiz)
-- Car Mode (unique differentiator; offline audio)
-- Report Card (full with charts — shows parents value)
-- XP / Levels (progression system for kids)
-- Scan Diary / OCR (reduces friction for topic selection)
-- Kid Mode (navigation lock for child safety)
-- Worksheet PDF (Sunday Printer expanded)
-- English module (Practice Pad + Word Builder Arcade)
-- CBSE + ICSE Grade 1-5 Math + English curriculum data
-- Phone OTP auth (primary auth for India)
-- Stripe (international payments)
-- Accessibility options (dyslexia font, TTS speed, high contrast)
-- Offline mode (full offline caching for child activities)
+#### Sprint C — Boards + Global (Weeks 19-26)
+*Expand to full board and subject coverage before launch.*
 
-### Phase 3: Growth (Weeks 21-30)
+| Area | What ships |
+|------|-----------|
+| **Arcade** | Sort It! (Science) |
+| **Multi-child** | Up to 3 children per account (free: unlimited profiles, 1 active Campaign) |
+| **Scan Diary / OCR** | `google_mlkit_text_recognition`; topic detection from photo (Pro) |
+| **Revision Ring** | Spaced repetition for mastered topics (Pro) |
+| **Fridge Art SVG** | Topic-specific printable art |
+| **Apple Sign-In** | Required for iOS App Store compliance |
+| **Hindi scripts** | Hindi-language teaching scripts for CBSE topics |
+| **Content** | + Common Core, IB PYP, Grades 1-5, Science/EVS (~150 topics total) |
 
-**Goal:** Expand content and geography. Drive toward $20K MRR.
+**Sprint C gate:** All content QA'd and reviewed before any launch. No soft launch or beta — full launch with complete product.
 
-**Added:**
-- Science/EVS module (Practice Pad with Image Labeling + Sort It! Arcade)
-- Revision Ring (spaced repetition)
-- Multi-child switching
-- Word Builder Arcade (English)
-- Sort It! Arcade (Science)
-- Hindi localization (scripts and explanations)
-- Common Core curriculum data (US market)
-- IB PYP curriculum data
+### Phase 2: Scale (Weeks 27+, post-launch)
 
-### Phase 4: Scale (Weeks 31+)
+**Goal:** Market expansion and monetization optimization, driven by real launch data.
 
-**Goal:** Market expansion and optimization.
+| Feature | Rationale |
+|---------|-----------|
+| State Board curriculum (Maharashtra, Rajasthan, etc.) | High-effort, incremental audience; needs launch data to prioritize which boards |
+| Hindi/Tamil/Telugu app UI | Localization infrastructure needed; content comes first |
+| A/B testing framework | Needs meaningful traffic volume before A/B tests are statistically valid |
+| Referral program ("Invite a parent, get 1 month free") | Needs subscription base before referrals have compounding effect |
+| Community features (per-topic discussion boards) | Trust & safety infrastructure; requires moderation team |
+| Advanced accessibility (full screen reader, OpenDyslexic) | Phase 1 ships dyslexia font + high contrast; full a11y requires dedicated audit |
+| Tablet-optimized layouts | Phone-first UX is stable before adapting to larger screens |
+| Voice-response practice Qs (STT) | STT reliability on children's voices is a product risk; deferred pending tech maturity |
+| Weekly progress email digest | Email infrastructure + content templates; low urgency vs. push notifications |
+| Arcade combo/power-up mechanics | Enhancement to core game loop that ships in Phase 1 |
 
-**Added:**
-- State Board curriculum data (Indian state boards)
-- Additional languages (Hindi UI, Tamil, Telugu)
-- A/B testing framework (paywall, onboarding, pricing)
-- Referral system ("Invite a parent, get 1 month free")
-- Community features (per-topic discussion boards)
-- Advanced accessibility (full screen reader support, OpenDyslexic)
-- Tablet-optimized layouts
+**$20K MRR Calculation (unchanged):**
+- Average Revenue Per Paid User: ~$4/month (blended India + International)
+- Required Paid Users: 5,000
+- At 4% Install-to-Paid: Need 125,000 installs
 
 ---
 

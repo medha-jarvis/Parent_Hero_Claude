@@ -106,45 +106,21 @@ Show this to 5 parents from Action 1. Watch them use it. Note:
 
 ---
 
-## Phase 1: Build the MVP (Weeks 3-10)
+## Phase 1: Build the Base Product (Weeks 3-26)
 
 **Only after Phase 0 confirms demand.** If validation is weak, iterate on positioning first.
 
-### What to Build (and What to Skip)
+Phase 1 = the complete product, built before launch. Three internal build sprints. You launch once with everything working — not in stages.
 
-Your PRD has 11 modules. Your MVP needs 5.
+> **Full feature details:** See `FEATURE_MATRIX.md`. Full phased module list: see PRD Section 15.
 
-**BUILD (MVP Scope):**
+---
 
-| Module | What to Build | What to Skip for Now |
-|--------|--------------|---------------------|
-| **Onboarding** | Name, Grade, Board, First Topic Wizard (browse only, no scan) | Scan diary, country auto-detect (hardcode India) |
-| **Dashboard** | Hero Card + Library grid. Hardcode "What Kids Are Learning" data. | Real-time popularity aggregation, Catch Up row |
-| **Campaign Day View** | Linear 3-step flow for Days 1-5. Day advancement on step completion. | Bonus activities section, past days view |
-| **Teaching Script** | Static script display with TTS. AI-generated, cached per topic. | Revised script for Day 2 (use same script) |
-| **Practice Pad** | Swipe-page model. Math only. Numeric input. 10 questions. | Whiteboard (add later), English/Science modes |
-| **Basic Quiz** | MCQ, 10 questions. Correct/wrong feedback. | Explanation sheets, difficulty ladder, Legend Quiz |
-| **Certificate** | Simple PDF. Child name + topic + date. Shareable as image. | Worksheet, Fridge Art, "Preview only" paywall |
+### Sprint A — Core Loop (Weeks 3-10)
 
-**SKIP FOR MVP (Add in Phase 2-3):**
+**Goal:** Build the interaction model end-to-end. Prove the script → practice → certificate loop works before adding breadth.
 
-- Arcade (all games)
-- Car Mode
-- Beat the Parent
-- Report Card
-- Daily Spark notifications
-- Sunday Printer (full)
-- Streak system
-- XP / Levels
-- Kid Mode
-- Multi-child
-- Offline mode
-- Scan diary OCR
-- Spaced repetition
-
-**Why this cut?** The core hypothesis is: "Parents will use teaching scripts + guided practice aligned to their school curriculum." You need to prove THAT before building gamification, Car Mode, and everything else. Every extra feature delays learning whether the core works.
-
-### Technical Setup (Week 3)
+#### Technical Setup (Week 3)
 
 1. **Create the Flutter project**
    ```
@@ -159,7 +135,7 @@ Your PRD has 11 modules. Your MVP needs 5.
    - Crashlytics
 
 3. **Seed the curriculum data**
-   - Start with: CBSE Grade 1-3, Math only (6-8 topics per grade = ~20 topics total)
+   - Start with: CBSE Grade 1-3, Math only (~20 topics)
    - Use the Firestore schema defined in `CURRICULUM_RESEARCH.md` Part 7.1
    - The full list of 20 seed topics with `topicId`s is in `CURRICULUM_RESEARCH.md` Part 7.3
    - Upload to Firestore `curriculum_topics` collection
@@ -167,110 +143,123 @@ Your PRD has 11 modules. Your MVP needs 5.
 4. **Pre-generate content for all 20 topics**
    - Write a script that calls Gemini for each topic
    - Generate all Campaign content (scripts, questions, riddles)
-   - Store in `content_cache`
-   - This means NO real-time AI calls in MVP -- everything is pre-cached
+   - QA all math answers programmatically (see PRD Section 4.3.4)
+   - Store in `content_cache` — NO real-time AI calls in Sprint A; everything pre-cached
    - Total cost: ~20 topics × $0.01 = $0.20
 
 5. **Set up Razorpay test account**
 
-### Build Sprint Plan (Weeks 4-9)
+#### Build Plan (Weeks 4-9)
 
 | Week | What to Build | Deliverable |
 |------|--------------|-------------|
-| Week 4 | Onboarding flow + Firebase Auth (Google only) + child profile storage | User can create account and add child |
+| Week 4 | Onboarding + Firebase Auth (Google only) + child profile storage | User can create account and add child |
 | Week 5 | Dashboard (Hero Card + Library grid) + curriculum data display | User can browse topics and pin one |
-| Week 6 | Campaign Day View + Teaching Script screen + TTS | User can start Campaign and read Day 1 script |
-| Week 7 | Practice Pad (Math, numeric input, swipe-page) | User can complete Practice Pad session |
-| Week 8 | Basic Quiz + Campaign day progression + Day 5 completion | Full 5-day Campaign works end to end |
-| Week 9 | Certificate generation + Razorpay integration + paywall at Day 4 | Payment works, free/pro gating works |
+| Week 6 | Campaign Day View + Teaching Script (tappable cards + TTS) | User can start Campaign and read Day 1 script |
+| Week 7 | Practice Pad (Math, numeric input + MCQ, 10 Qs, dual explanation) | User can complete a Practice Pad session |
+| Week 8 | Basic Quiz + Campaign day progression + Day 5 completion | Full 5-day Campaign works end-to-end |
+| Week 9 | Certificate PDF + Razorpay + paywall soft gate at Day 4 | Payment works; free/pro gating works |
 
-### Week 10: Internal Testing
-
-- Test full flow yourself 10+ times
-- Get 5 parents from Phase 0 to test (give them free Pro access)
-- Fix critical bugs
-- Confirm Analytics events are firing (see PRD Section 11.2 for the full event taxonomy)
-
----
-
-## Phase 2: Launch & Get First 100 Users (Weeks 11-14)
-
-### Soft Launch (Week 11)
-
-- Deploy to Google Play (internal testing → open testing → production)
-- iOS can wait (Play Store approval is faster; India is Android-first)
-- Email your waitlist: "ParentHero is live! Here's your free 3-month Pro code."
-
-### First Users Strategy
-
-**Your first 100 users will NOT come from ads.** They'll come from:
-
-1. **Your waitlist** (from Phase 0 landing page)
-2. **WhatsApp groups** -- Find 5-10 parent WhatsApp groups (school groups, apartment groups, parenting groups). Post a genuine message:
-   > "Hey everyone, I built an app that helps parents explain school topics to kids. It's aligned to CBSE curriculum and gives you a 3-minute teaching script for any topic. Would love your feedback -- it's free for the first 3 months. [link]"
-3. **Personal network** -- Every parent you know. Ask them to try it and give honest feedback.
-4. **Instagram/Facebook parenting pages** -- Reach out to 5-10 parenting micro-influencers (5K-50K followers). Offer free lifetime Pro in exchange for an honest review.
-
-### What to Measure (Weeks 11-14)
-
-| Metric | How to Measure | Target | What It Tells You |
-|--------|---------------|--------|-------------------|
-| Day 1 Campaign completion | Analytics event | 50%+ of users who start | Is Day 1 content engaging? |
-| Day 1 → Day 2 return | Analytics event | 40%+ | Will they come back? |
-| Day 5 Campaign completion | Analytics event | 25%+ | Is the full flow working? |
-| Practice Pad session duration | Analytics event | 8+ minutes | Are kids actually practicing? |
-| Qualitative feedback | WhatsApp messages, in-app feedback | N/A | What do parents love/hate? |
-| Paywall conversion | Analytics event | 5%+ | Will they pay? |
-
-### Iterate Based on Data
-
-After 2 weeks with 50-100 users, you'll know:
-- **If Day 1 completion is low:** Your teaching script isn't resonating. Interview parents. Maybe they want video, not text. Maybe the script is too long or too short.
-- **If Day 1→2 return is low:** The hook isn't strong enough. The first session didn't create enough value to come back. Consider: is the Practice Pad engaging? Is there a reason to return?
-- **If Campaign completion is low but early days are fine:** The middle days are weak. You might need Arcade/gamification sooner than planned.
-- **If paywall conversion is <3%:** Either the price is wrong, the free tier gives too much, or the Pro features aren't compelling. Experiment.
+#### Sprint A Testing (Week 10)
+- Test full flow yourself 10+ times across different topics
+- Get 5 parents from Phase 0 to test (give free Pro access)
+- Fix critical bugs; confirm all Analytics events firing (see PRD Section 11.2)
+- **Gate:** Does the core loop feel right? Is the teaching script format working? Fix before moving to Sprint B.
 
 ---
 
-## Phase 3: Add Engagement Features (Weeks 15-20)
+### Sprint B — Engagement + Content Depth (Weeks 11-18)
 
-**Only build these after MVP data confirms the core loop works.**
+**Goal:** Add retention mechanics, engagement features, and expand to all subjects. Build everything the product needs except board expansion.
 
-Priority order (based on expected impact on retention):
+| Week | Focus Area | Key Deliverables |
+|------|-----------|-----------------|
+| Week 11 | Auth + Streak | Phone OTP auth; daily streak tracking + XP + level-up |
+| Week 12 | Arcade | Number Rush (Math) + Word Builder (English); free quota enforced |
+| Week 13 | Beat the Parent + Car Mode | Async quiz reveal; audio-only script playback |
+| Week 14 | Report Card + Kid Mode | Campaign history + mastery chart; navigation lock + PIN |
+| Week 15 | Engagement polish | Daily Spark full rotation; whiteboard in Practice Pad; inline visuals in scripts |
+| Week 16 | Payments + offline | Stripe integration; family plans; full offline mode (Hive caching) |
+| Week 17 | Sunday Printer + accessibility | Worksheet PDF; high contrast; data export |
+| Week 18 | Content: English + ICSE | CBSE+ICSE Grade 1-4 Math+English content (~70 topics total) |
 
-1. **Streak system** -- Easiest to build, highest retention impact
-2. **Arcade (Number Rush)** -- Drives session duration
-3. **Daily Spark notifications** -- Drives daily return
-4. **Scan Diary (OCR)** -- Wow factor, reduces friction for topic selection
-5. **XP / Levels** -- Progression system for kids
-6. **Kid Mode** -- Important for trust/safety
-7. **Car Mode** -- Unique differentiator
-8. **Report Card** -- Retention for parents (shows value)
+#### Sprint B Testing (end of Week 18)
+- Full regression of all Sprint A + B features
+- Specific test: streak continuity over 7 days; offline → online sync; Arcade lives quota reset
+- **Gate:** Full engagement loop (Campaign → Arcade → Streak → Certificate) feels complete. No major UX gaps.
 
 ---
 
-## Phase 4: Scale to $20K MRR (Weeks 21-40)
+### Sprint C — Boards + Global Expansion (Weeks 19-26)
 
-### Expand Content
-- Add English module (Practice Pad + Word Builder Arcade)
-- Add Science/EVS module
-- Add ICSE curriculum
-- Add Grades 4-5
-- Add Common Core (US market)
+**Goal:** Expand to all boards, all grades, Science/EVS, and advanced features. Get to ~150 topics and full global readiness.
+
+| Week | Focus Area | Key Deliverables |
+|------|-----------|-----------------|
+| Week 19 | Science/EVS | Sort It! Arcade; drag-to-label in Practice Pad; Science content (CBSE Grade 1-3) |
+| Week 20 | Multi-child + Revision Ring | Up to 3 child profiles; spaced repetition logic |
+| Week 21 | Scan Diary / OCR | `google_mlkit_text_recognition`; topic detection; fallback to manual selection |
+| Week 22 | Apple Sign-In + iOS build | App Store compliance; Apple Sign-In required |
+| Week 23 | Common Core + IB PYP | Board-specific content overlay; curriculum mapping |
+| Week 24 | Grades 4-5 | Content expansion across all subjects + boards |
+| Week 25 | Fridge Art SVG + Hindi scripts | Topic-specific art assets; Hindi-language teaching scripts |
+| Week 26 | Full QA + content audit | All ~150 topics reviewed; all error fallbacks tested; launch readiness check |
+
+#### Sprint C Gate (End of Week 26)
+- All content QA'd and human-reviewed (see PRD Section 4.3.4)
+- All 11 modules working end-to-end on both Android and iOS
+- All Analytics events confirmed firing
+- All payment flows tested (Razorpay + Stripe, all plans, renewal + cancellation + downgrade)
+- **No launch until this gate passes.** There is no soft launch or beta — we launch complete.
+
+---
+
+## Launch: Full Release (Week 27)
+
+- Deploy to Google Play (Android) + App Store (iOS) simultaneously
+- Email waitlist: "ParentHero is live — and it's the full product."
+- WhatsApp groups + personal network + micro-influencer outreach
+- First 100 users from waitlist get free 3-month Pro code
+
+### What to Measure at Launch
+
+| Metric | Target | What It Tells You |
+|--------|--------|-------------------|
+| Day 1 Campaign completion | 50%+ | Is Day 1 content engaging? |
+| Day 1 → Day 2 return | 40%+ | Will they come back? |
+| Day 5 Campaign completion | 25%+ | Is the full loop working? |
+| Practice Pad session duration | 8+ minutes | Are kids actually practicing? |
+| Paywall conversion | 5%+ | Will they pay? |
+| Streak 7-day retention | 30%+ | Is the daily habit forming? |
+
+---
+
+## Phase 2: Scale to $20K MRR (Weeks 27+, post-launch)
+
+**Build Phase 2 only after launch data confirms what to prioritize.**
 
 ### Grow Users
-- Paid ads (Instagram, Facebook, Google UAC)
-- Target CAC: <$3 (India), <$10 (US)
-- Target LTV: >$15 (India), >$40 (US)
+- Paid ads (Instagram, Facebook, Google UAC) — Target CAC: <₹250 (India), <$10 (US)
 - ASO (App Store Optimization): screenshots, keywords, ratings
-- Referral program: "Invite a parent, both get 1 month free"
 - Content marketing: Parent tips blog/Instagram
+- Referral program: "Invite a parent, both get 1 month free"
 
-### Pricing Optimization
+### Expand Content
+- State Board curriculum (Maharashtra, Rajasthan, Karnataka — based on user demand data)
+- Hindi/Tamil/Telugu app UI (localization)
+
+### Optimize Monetization
 - A/B test: ₹199 vs ₹299 vs ₹399
 - A/B test: paywall at Day 3 vs Day 4
-- Introduce Annual plans
-- Introduce Family plan
+- A/B testing framework (needs sufficient traffic volume)
+
+### Phase 2 Features
+- Voice-response practice questions (STT)
+- Arcade combo/power-up mechanics
+- Weekly progress email digest
+- Community features (per-topic discussion boards)
+- Advanced accessibility (screen reader, OpenDyslexic)
+- Tablet-optimized layouts
 
 ### $20K MRR Math
 
@@ -279,8 +268,6 @@ Priority order (based on expected impact on retention):
 | India only | ₹299 (~$3.50) | 5,714 | 143,000 |
 | India only | ₹399 (~$4.70) | 4,255 | 106,000 |
 | India + US mix (80/20) | Blended $5 | 4,000 | 100,000 |
-
-At 100-140K installs over ~6 months, that's ~500-800 installs/day. Achievable with a mix of organic (ASO, referrals, word-of-mouth) and paid (~₹30K-50K/month ad spend).
 
 ---
 

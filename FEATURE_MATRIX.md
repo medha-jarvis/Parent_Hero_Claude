@@ -1,9 +1,20 @@
 # ParentHero Feature Matrix
 **Single source of truth for feature scope, access tier, board/grade coverage.**
 
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 
-> **How to use this file:** Before adding any feature to a sprint, confirm its MVP status here. Before writing PRD detail for any feature, confirm its Free vs. Pro tier here. All other documents (PRD, NEXT_STEPS, CONTENT_EVALUATION) should reference this file rather than re-stating tier boundaries.
+> **How to use this file:** Before adding any feature to a sprint, confirm its phase here. Before writing PRD detail for any feature, confirm its Free vs. Pro tier here. All other documents (PRD, NEXT_STEPS, CONTENT_EVALUATION) should reference this file rather than re-stating tier boundaries.
+
+---
+
+## Phase Structure
+
+| Phase | Name | Goal | When |
+|-------|------|------|------|
+| **Phase 1** | Base Product | Build the complete product — all subjects, boards, engagement features — before launch | Weeks 3-26 (pre-launch) |
+| **Phase 2** | Scale | Post-launch expansion — new markets, languages, community, advanced tooling | Weeks 27+ (post-launch) |
+
+> **Note:** Phase 1 has internal build sprints (A → B → C) to sequence work. Sprint A covers the core loop. Sprint B adds engagement and content depth. Sprint C adds boards and global expansion. All sprints complete before launch.
 
 ---
 
@@ -11,169 +22,170 @@ Last updated: 2026-03-16
 
 | Column | Meaning |
 |--------|---------|
-| **MVP** | ✅ In MVP build (Weeks 3-10) · ⏳ Phase 2 (Weeks 11-20) · 🔜 Phase 3+ |
+| **Phase** | ✅ Phase 1 (base product, build before launch) · ⏳ Phase 2 (post-launch) |
+| **Sprint** | A = core loop (Weeks 3-10) · B = engagement + content (Weeks 11-18) · C = boards + global (Weeks 19-26) |
 | **Free** | ✅ Available to free users · ❌ Pro only · ⚡ Partial (see note) |
 | **Pro** | ✅ Available to Pro subscribers |
-| **Board** | Which curriculum boards are supported at launch |
-| **Grades** | Which grade levels are supported at launch |
+| **Board** | Which curriculum boards support this feature at the end of Phase 1 |
+| **Grades** | Which grade levels support this feature at the end of Phase 1 |
 
 ---
 
 ## Module A — Onboarding & Account
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Phone OTP sign-up | ✅ | ✅ | ✅ | All | All | Primary auth method |
-| Google Sign-In | ✅ | ✅ | ✅ | All | All | Secondary |
-| Apple Sign-In | ⏳ | ✅ | ✅ | All | All | Phase 2 (iOS launch) |
-| Child profile creation (name, grade, board) | ✅ | ✅ | ✅ | CBSE | 1-3 | MVP: CBSE G1-3 only |
-| Multi-child support | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Guest mode (no account) | ✅ | ✅ | — | CBSE | 1-3 | Data synced on sign-up |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Phone OTP sign-up | ✅ | A | ✅ | ✅ | All | All | Primary auth for India |
+| Google Sign-In | ✅ | A | ✅ | ✅ | All | All | Secondary |
+| Apple Sign-In | ✅ | C | ✅ | ✅ | All | All | Required for iOS App Store |
+| Child profile creation (name, grade, board) | ✅ | A | ✅ | ✅ | All | 1-5 | Sprint A: CBSE G1-3 only; expands each sprint |
+| Multi-child support | ✅ | C | ✅ | ✅ | All | All | Phase 1; up to 3 children |
+| Guest mode (no account) | ✅ | A | ✅ | — | CBSE | 1-3 | Data synced on sign-up |
 
 ---
 
 ## Module B — Dashboard (Home Screen)
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Active Campaign card | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
-| Topic Library browse | ✅ | ✅ | ✅ | CBSE | 1-3 | Read-only; pinning starts campaign |
-| "What Kids Are Learning" row | ✅ | ✅ | ✅ | CBSE | 1-3 | Requires connectivity; cached fallback |
-| Streak counter display | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| XP/Level display | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Filter by subject/grade | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
-| Offline cached dashboard | ✅ | ✅ | ✅ | CBSE | 1-3 | Timestamp shown when offline |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Active Campaign card | ✅ | A | ✅ | ✅ | All | 1-5 | — |
+| Topic Library browse | ✅ | A | ✅ | ✅ | All | 1-5 | Read-only; pinning starts Campaign |
+| "What Kids Are Learning" row | ✅ | A | ✅ | ✅ | All | 1-5 | Requires connectivity; cached fallback |
+| Streak counter display | ✅ | B | ✅ | ✅ | All | All | — |
+| XP/Level display | ✅ | B | ✅ | ✅ | All | All | — |
+| Filter by subject/grade | ✅ | A | ✅ | ✅ | All | 1-5 | — |
+| Offline cached dashboard | ✅ | B | ✅ | ✅ | All | All | Full offline mode Sprint B |
 
 ---
 
 ## Module C — Campaign (5-Day Learning Arc)
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Day 1-3 access | ✅ | ✅ | ✅ | CBSE | 1-3 | Free users get full Days 1-3 |
-| Day 4-5 access | ✅ | ❌ | ✅ | CBSE | 1-3 | Paywall at Day 4; soft gate (2-min preview) |
-| Campaign progress tracking | ✅ | ✅ | ✅ | CBSE | 1-3 | Stored locally + Firestore |
-| Daily campaign reminder notification | ✅ | ✅ | ✅ | All | All | Opt-in at onboarding |
-| Campaign completion badge | ✅ | ❌ | ✅ | CBSE | 1-3 | Pro only; shown as teaser to free users |
-| Spaced repetition / Revision Ring | 🔜 | — | ✅ | All | All | Phase 3+ |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Day 1-3 access | ✅ | A | ✅ | ✅ | All | 1-5 | Free users get full Days 1-3 |
+| Day 4-5 access | ✅ | A | ❌ | ✅ | All | 1-5 | Paywall at Day 4; soft gate (2-min preview) |
+| Campaign progress tracking | ✅ | A | ✅ | ✅ | All | 1-5 | Stored locally + Firestore |
+| Daily campaign reminder notification | ✅ | A | ✅ | ✅ | All | All | Opt-in at onboarding |
+| Campaign completion badge | ✅ | A | ❌ | ✅ | All | 1-5 | Pro only; shown as teaser to free users |
+| Spaced repetition / Revision Ring | ✅ | C | — | ✅ | All | All | Phase 1; post-completion feature |
 
 ---
 
 ## Module D — Teaching Script
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Tappable card-based script display | ✅ | ✅ | ✅ | CBSE | 1-3 | Max ~5 cards per script |
-| Text-to-Speech (TTS) narration | ✅ | ✅ | ✅ | CBSE | 1-3 | `flutter_tts`; fallback: text-only |
-| "If Struggling" fallback block | ✅ | ✅ | ✅ | CBSE | 1-3 | One fallback per script |
-| Inline visual aids / emoji diagrams | ⏳ | ✅ | ✅ | All | All | Phase 2 (Science topics especially) |
-| Script progress bar | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Tappable card-based script display | ✅ | A | ✅ | ✅ | All | 1-5 | Max ~5 cards per script |
+| Text-to-Speech (TTS) narration | ✅ | A | ✅ | ✅ | All | 1-5 | `flutter_tts`; fallback: text-only |
+| "If Struggling" fallback block | ✅ | A | ✅ | ✅ | All | 1-5 | One fallback per script |
+| Inline visual aids / emoji diagrams | ✅ | B | ✅ | ✅ | All | All | Needed for Science topics in Sprint B |
+| Script progress bar | ✅ | A | ✅ | ✅ | All | 1-5 | — |
 
 ---
 
 ## Module E — Practice Pad
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| 10-question session (Math) | ✅ | ✅ | ✅ | CBSE | 1-3 | Free: capped at 10 Qs per session |
-| Unlimited questions (Math) | ✅ | ❌ | ✅ | CBSE | 1-3 | Pro unlocks unlimited sessions |
-| Numeric input questions | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
-| Multiple choice questions | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
-| Drag-to-label questions | ⏳ | ✅ | ✅ | All | All | Phase 2 (Science topics) |
-| Dual explanation on wrong answer (Child + Parent mode) | ✅ | ✅ | ✅ | CBSE | 1-3 | Core differentiator |
-| Drawing / whiteboard input | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Difficulty progression within session | ✅ | ✅ | ✅ | CBSE | 1-3 | Easy → Medium → Hard across 10 Qs |
-| Question pool randomization (50-question pool, show 10) | ✅ | ✅ | ✅ | CBSE | 1-3 | Prevents repetition on replay |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| 10-question session | ✅ | A | ✅ | ✅ | All | 1-5 | Free: capped at 10 Qs per session |
+| Unlimited sessions | ✅ | A | ❌ | ✅ | All | 1-5 | Pro unlocks unlimited sessions |
+| Numeric input questions | ✅ | A | ✅ | ✅ | All | 1-5 | — |
+| Multiple choice questions | ✅ | A | ✅ | ✅ | All | 1-5 | — |
+| Drag-to-label questions | ✅ | B | ✅ | ✅ | All | All | Required for Science (plants, body parts) |
+| Dual explanation on wrong answer | ✅ | A | ✅ | ✅ | All | 1-5 | Core differentiator; Child + Parent mode |
+| Drawing / whiteboard input | ✅ | B | ✅ | ✅ | All | All | Math working-out space |
+| Difficulty progression within session | ✅ | A | ✅ | ✅ | All | 1-5 | Easy → Medium → Hard across 10 Qs |
+| Question pool randomization | ✅ | A | ✅ | ✅ | All | 1-5 | 50-question pool; 10 randomly selected |
 
 ---
 
 ## Module F — Beat the Parent Quiz
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| End-of-campaign quiz (5 questions) | ✅ | ❌ | ✅ | CBSE | 1-3 | Gated at Day 5 (Pro) |
-| Parent vs. child reveal moment | ✅ | ❌ | ✅ | CBSE | 1-3 | Countdown + confetti animation |
-| Share result image | ✅ | ❌ | ✅ | CBSE | 1-3 | Shareable image generated client-side |
-| Trap question included | ✅ | ❌ | ✅ | CBSE | 1-3 | Q4 is always the "trick" question |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| End-of-campaign quiz (5 questions) | ✅ | B | ❌ | ✅ | All | 1-5 | Gated at Day 5 (Pro) |
+| Parent vs. child reveal moment | ✅ | B | ❌ | ✅ | All | 1-5 | Countdown + confetti animation |
+| Share result image | ✅ | B | ❌ | ✅ | All | 1-5 | Shareable image generated client-side |
+| Trap question included | ✅ | B | ❌ | ✅ | All | 1-5 | Q4 is always the "trick" question |
 
 ---
 
 ## Module G — Car Mode
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Audio-only script playback | ⏳ | ❌ | ✅ | All | All | Phase 2 |
-| Voice-response practice Qs | ⏳ | ❌ | ✅ | All | All | Phase 3 (STT complexity) |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Audio-only script playback | ✅ | B | ❌ | ✅ | All | All | Unique differentiator; Pro only |
+| Voice-response practice Qs (STT) | ⏳ | — | ❌ | ✅ | All | All | Phase 2; STT reliability risk |
 
 ---
 
 ## Module H — Arcade
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Number Rush (Math) | ⏳ | ⚡ | ✅ | CBSE | 1-3 | Phase 2; Free: 3 plays/day |
-| Word Builder (English) | ⏳ | ⚡ | ✅ | All | All | Phase 3 |
-| Sort It! (Science) | ⏳ | ⚡ | ✅ | All | All | Phase 3 |
-| Combo/power-up mechanics | 🔜 | ❌ | ✅ | All | All | Phase 3+ |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Number Rush (Math) | ✅ | B | ⚡ | ✅ | All | 1-5 | Free: 3 plays/day |
+| Word Builder (English) | ✅ | B | ⚡ | ✅ | All | All | Free: 3 plays/day |
+| Sort It! (Science) | ✅ | C | ⚡ | ✅ | All | All | Free: 3 plays/day |
+| Combo/power-up mechanics | ⏳ | — | ❌ | ✅ | All | All | Phase 2 enhancement |
 
 ---
 
 ## Module I — Streak & XP System
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Daily streak tracking | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| XP points per action | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Level-up celebration | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Streak freeze / grace day | ⏳ | ❌ | ✅ | All | All | Phase 2; Pro perk |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Daily streak tracking | ✅ | B | ✅ | ✅ | All | All | — |
+| XP points per action | ✅ | B | ✅ | ✅ | All | All | — |
+| Level-up celebration | ✅ | B | ✅ | ✅ | All | All | — |
+| Streak freeze / grace day | ✅ | B | ❌ | ✅ | All | All | Pro perk |
 
 ---
 
 ## Module J — Parent Report Card
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Campaign completion history | ⏳ | ❌ | ✅ | All | All | Phase 2 |
-| Mastery chart by subject | ⏳ | ❌ | ✅ | All | All | Phase 2 |
-| Weekly progress email digest | 🔜 | ❌ | ✅ | All | All | Phase 3+ |
-| Scan diary / OCR intake | 🔜 | ❌ | ✅ | All | All | Phase 3+ |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Campaign completion history | ✅ | B | ❌ | ✅ | All | All | — |
+| Mastery chart by subject | ✅ | B | ❌ | ✅ | All | All | `fl_chart` |
+| Scan Diary / OCR topic intake | ✅ | C | ❌ | ✅ | All | All | `google_mlkit_text_recognition` |
+| Weekly progress email digest | ⏳ | — | ❌ | ✅ | All | All | Phase 2 |
 
 ---
 
 ## Module K — Settings
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Account management (name, phone) | ✅ | ✅ | ✅ | All | All | DPDP compliance: delete account option |
-| Child profile edit (grade, board) | ✅ | ✅ | ✅ | CBSE | 1-3 | — |
-| Notification preferences | ✅ | ✅ | ✅ | All | All | Toggle + time picker |
-| Subscription management | ✅ | ✅ | ✅ | All | All | Links to Razorpay/Stripe portal |
-| Dyslexia font toggle | ✅ | ✅ | ✅ | All | All | Accessibility |
-| TTS speed control | ✅ | ✅ | ✅ | All | All | 0.75x, 1x, 1.25x |
-| High contrast mode | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Privacy policy / Terms links | ✅ | ✅ | ✅ | All | All | Required for compliance |
-| Export my data | ⏳ | ✅ | ✅ | All | All | Phase 2; GDPR/DPDP requirement |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Account management (name, phone) | ✅ | A | ✅ | ✅ | All | All | DPDP: delete account option required |
+| Child profile edit (grade, board) | ✅ | A | ✅ | ✅ | All | All | — |
+| Notification preferences + time picker | ✅ | A | ✅ | ✅ | All | All | — |
+| Subscription management | ✅ | A | ✅ | ✅ | All | All | Links to Razorpay/Stripe portal |
+| Dyslexia font toggle | ✅ | A | ✅ | ✅ | All | All | — |
+| TTS speed control | ✅ | A | ✅ | ✅ | All | All | 0.75x, 1.0x, 1.25x |
+| High contrast mode | ✅ | B | ✅ | ✅ | All | All | Accessibility |
+| Export my data | ✅ | B | ✅ | ✅ | All | All | GDPR/DPDP requirement |
+| Privacy policy / Terms links | ✅ | A | ✅ | ✅ | All | All | Required for store compliance |
 
 ---
 
 ## Module — Certificates & Rewards
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Campaign completion certificate (PDF) | ✅ | ❌ | ✅ | CBSE | 1-3 | Pro only |
-| Printable worksheet | ⏳ | ❌ | ✅ | CBSE | 1-3 | Phase 2 |
-| Fridge Art SVG (topic-specific) | ⏳ | ❌ | ✅ | All | All | Phase 2 |
-| Personalized certificate (name + score) | ✅ | ❌ | ✅ | CBSE | 1-3 | Name from child profile; score from quiz |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Campaign completion certificate (PDF) | ✅ | A | ❌ | ✅ | All | 1-5 | Pro only |
+| Personalized certificate (name + score) | ✅ | A | ❌ | ✅ | All | 1-5 | Score from quiz |
+| Printable worksheet | ✅ | B | ❌ | ✅ | All | All | Sunday Printer |
+| Fridge Art SVG (topic-specific) | ✅ | C | ❌ | ✅ | All | All | — |
 
 ---
 
 ## Module — Kid Mode
 
-| Feature | MVP | Free | Pro | Board | Grades | Notes |
-|---------|-----|------|-----|-------|--------|-------|
-| Kid Mode UI (large touch targets) | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Navigation lock (3-second hold to exit) | ⏳ | ✅ | ✅ | All | All | Phase 2 |
-| Parent PIN to exit Kid Mode | ⏳ | ✅ | ✅ | All | All | Phase 2; more robust than hold-only |
+| Feature | Phase | Sprint | Free | Pro | Board | Grades | Notes |
+|---------|-------|--------|------|-----|-------|--------|-------|
+| Kid Mode UI (large touch targets) | ✅ | B | ✅ | ✅ | All | All | — |
+| Navigation lock (3-sec hold to exit) | ✅ | B | ✅ | ✅ | All | All | — |
+| Parent PIN to exit Kid Mode | ✅ | B | ✅ | ✅ | All | All | More robust than hold-only |
 
 ---
 
@@ -186,6 +198,8 @@ Last updated: 2026-03-16
 | Free | ₹0 | $0 | — |
 | Pro Monthly | ₹299/month | $4.99/month | Auto-renew |
 | Pro Annual | ₹1,999/year | $39.99/year | Auto-renew; ~44% saving |
+| Pro Family Monthly | ₹399/month | $6.99/month | Up to 3 children |
+| Pro Family Annual | ₹3,499/year | $59.99/year | Up to 3 children |
 
 ### Paywall Behavior
 
@@ -197,20 +211,39 @@ Last updated: 2026-03-16
 
 ---
 
-## Curriculum Scope by Phase
+## Curriculum Scope
 
-| Phase | Boards | Grades | Subjects | Approx Topics |
-|-------|--------|--------|----------|--------------|
-| MVP (Weeks 3-10) | CBSE only | Grade 1-3 | Math only | ~20 topics |
-| Phase 2 (Weeks 11-20) | CBSE, ICSE | Grade 1-4 | Math + English | ~60 topics |
-| Phase 3 (Weeks 21-30) | + Common Core | Grade 1-5 | Math + English + Science/EVS | ~120 topics |
-| Phase 4 (Weeks 31-40) | + IB PYP, State Boards | Grade 1-5 | All subjects | ~200+ topics |
+| Phase | Sprint | Boards | Grades | Subjects | Approx Topics |
+|-------|--------|--------|--------|----------|--------------|
+| Phase 1 | Sprint A | CBSE | 1-3 | Math | ~20 |
+| Phase 1 | Sprint B | CBSE + ICSE | 1-4 | Math + English | ~70 |
+| Phase 1 | Sprint C | + Common Core, IB PYP | 1-5 | Math + English + Science/EVS | ~150 |
+| Phase 2 | — | + State Boards | 1-5 | All + regional subjects | ~200+ |
 
 ---
 
-## Open Questions (to resolve before Phase 2)
+## Phase 2 Feature List (Post-Launch)
 
-1. **Multi-child:** Is free tier limited to 1 child profile or unlimited children?
-2. **Board expansion:** When adding ICSE, does sequencing change (ICSE is 6-12 months ahead of CBSE)?
-3. **Arcade free quota:** "3 plays/day" for free — is this per game type or total arcade plays?
-4. **Annual plan timing:** Offer annual plan from Day 1 or only after user completes first campaign?
+These features are explicitly out of scope for the base product launch:
+
+| Feature | Rationale for deferral |
+|---------|----------------------|
+| Voice-response practice Qs (STT) | STT accuracy on children's voices is unreliable; high support risk |
+| Arcade combo/power-up mechanics | Enhancement; core game loop ships in Phase 1 |
+| Weekly progress email digest | Needs email infrastructure and content templates; low urgency |
+| State Board curriculum (Rajasthan, Maharashtra, etc.) | Small incremental audience; high content effort |
+| Hindi/Tamil/Telugu UI | Localization tooling needed; Phase 1 ships English UI only |
+| A/B testing framework | Requires meaningful traffic volume to be useful |
+| Referral program | Needs subscription base before referrals have value |
+| Community features (per-topic discussion boards) | Trust & safety overhead; requires moderation |
+| Advanced accessibility (screen reader, OpenDyslexic) | Phase 1 has dyslexia font + high contrast; full a11y is Phase 2 |
+| Tablet-optimized layouts | Phone-first; tablet optimization after core UX is stable |
+
+---
+
+## Open Questions (to resolve before Sprint B)
+
+1. **Multi-child free tier:** Is free tier limited to 1 child profile or unlimited? (Recommend: unlimited children, but only 1 active Campaign at a time on free)
+2. **Arcade free quota scope:** "3 plays/day" — is this per game type or total across all Arcade games?
+3. **Annual plan timing:** Offer annual plan from Day 1 or surface it only after user hits paywall?
+4. **ICSE sequencing:** ICSE is 6-12 months ahead of CBSE — does the "What Kids Are Learning" row need board-aware filtering to avoid showing Grade 2 content to a Grade 1 ICSE parent?
