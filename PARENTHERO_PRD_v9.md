@@ -211,6 +211,45 @@ The transition happens when a user taps on their Active Focus card. They move fr
 | `flutter_animate` | Micro-animations for UI transitions | Global |
 | `confetti_widget` | Confetti burst on Certificate/Mastery unlock | Module F |
 
+### 4.4 Library Implementation Notes
+
+#### `flutter_drawing_board`
+- Initialize with `DrawingController`
+- Pen color: Black (`#1A1A1A`), stroke width: 3.0
+- Undo: `controller.undo()`; Clear: `controller.clear()` (with confirmation dialog)
+- Drawing canvas is NOT saved; controller disposed when navigating away from whiteboard
+
+#### `lottie`
+- All animation files stored in `assets/animations/` directory
+- Required animations:
+  - `confetti.json` — Campaign completion, Beat the Parent win, Certificate unlock
+  - `level_up.json` — XP level-up celebration
+  - `streak_milestone.json` — 7-day, 14-day, 30-day streak milestone
+  - `loading_math.json` — Content generation loading screen (math theme)
+  - `loading_science.json` — Content generation loading screen (science theme)
+  - `loading_english.json` — Content generation loading screen (English theme)
+- Animations auto-play once, then stop on last frame (no looping except loading animations which loop)
+- Dismiss via user tap or auto-dismiss after animation completes
+
+#### `hive_flutter`
+- Encryption: AES-256 via `flutter_secure_storage` key storage
+  - On first app launch: generate random 32-byte key, store in secure storage
+  - On subsequent launches: retrieve key from secure storage, open encrypted Hive box
+- Box names: `campaignContent`, `userProgress`, `pendingSync`, `curriculumMaps`
+- Cache invalidation: `campaignContent` box entries have `generatedAt` timestamp; if >30 days old, re-fetch from Firestore
+- Max size: no hard cap (content is small text; typical cache < 10MB per user)
+- Conflict resolution: Firestore is the source of truth for all user progress. On reconnect, Firestore data overwrites Hive for `userProgress` box. Hive writes go to `pendingSync` box first, then applied to Firestore and moved to confirmed state.
+
+#### `confetti_widget`
+- Use `ConfettiController(duration: Duration(seconds: 3))`
+- Colors: [subject color (blue/coral/green), gold, white]
+- Direction: straight down from top; particle count: 50 per second
+
+#### `fl_chart`
+- Report Card bar chart (weekly activity): `BarChart` with 7 bars, custom tooltips showing session count
+- Report Card mastery chart: `PieChart` with 3 segments (mastered, in-progress, not started)
+- Colors match subject color system (Section 5.2)
+
 ### 4.3 Architecture Principles
 
 #### 4.3.1 Offline-First Design
@@ -274,7 +313,8 @@ STEP 2: Generate via Gemini 3 Pro (batch, NOT real-time)
   ├── Call 3: Quiz Questions - 30 questions across 3 difficulties (1 call)
   ├── Call 4: Daily Content - 5 riddles, 5 stories, 5 activities (1 call)
   ├── Call 5: Arcade Content - subject-specific game data (1 call)
-  └── Total: 5 AI calls per Campaign (amortized to ~0 after caching)
+  ├── Call 6: Beat the Parent Questions - 5 harder questions (1 call)
+  └── Total: 6 AI calls per Campaign (amortized to ~0 after caching)
 
 STEP 3: Programmatic Verification (Math only)
   → For each generated math question: solve independently using code
@@ -288,7 +328,7 @@ STEP 5: Mark Campaign as "Ready" → Push notification: "Ira's Money Campaign is
 
 **Cost Estimation:**
 - Gemini 3 Pro: ~$0.002 per call (input + output tokens for educational content)
-- 5 calls per Campaign = $0.01 per new Campaign
+- 6 calls per Campaign = $0.012 per new Campaign (includes Beat the Parent question generation, Call 6)
 - After caching: Most Campaigns cost $0 (same Grade 1 CBSE Money content reused)
 - Target: <$0.05/user/month in AI costs
 
@@ -507,6 +547,74 @@ Every screen must have a designed empty state with a clear CTA.
 | Library (Subject tab) | No topics for this board | "We're adding [Board] topics soon! In the meantime, try our Common topics." | [Browse Common Topics] |
 | Practice Pad | No questions loaded (offline + no cache) | "We need to download [Ira]'s practice questions. Connect to the internet and try again." | [Retry] |
 | Report Card | No data yet | "Complete your first Campaign to see [Ira]'s progress here!" | [Go to Dashboard] |
+
+### 5.7 Navigation Architecture
+
+**Navigation Structure:**
+```
+Bottom Navigation (always visible, 3 tabs):
+├── [🏠 Home] → Dashboard (Stack: Dashboard)
+├── [📊 Progress] → Report Card (Stack: ReportCard)
+└── [⚙️ Settings] → Settings (Stack: Settings)
+```
+
+**Navigation Hiding Rules:**
+- Bottom nav is HIDDEN during: Teaching Script, Practice Pad, Quiz, Beat the Parent, Arcade, Car Mode, Kid Mode
+- Bottom nav is VISIBLE during: Dashboard, Report Card, Settings, Campaign Day View overview, Certificate screen
+
+**Back Button Behavior:**
+
+| Current Screen | Back Goes To |
+|----------------|-------------|
+| Teaching Script | Campaign Day View |
+| Practice Pad | Campaign Day View |
+| Quiz | Campaign Day View |
+| Beat the Parent (parent taking) | Campaign Day View |
+| Beat the Parent (reveal) | Campaign Day View |
+| Arcade | Campaign Day View (if launched from campaign) / Dashboard (if standalone) |
+| Car Mode | Dashboard |
+| Certificate | Campaign Day View (Day 5 complete state) |
+| Topic Detail | Library (Dashboard tab) |
+| Campaign Day View | Dashboard |
+| Report Card | Dashboard (pops to root) |
+| Settings sub-screen | Settings root |
+
+**Back in Kid Mode:** Back button is DISABLED entirely in Kid Mode. Only the 3-second long press + parent PIN exits Kid Mode. System back gesture is intercepted.
+
+**Deep Link URL Scheme:** `parenthero://`
+
+| Deep Link | Destination | Auth Required |
+|-----------|-------------|--------------|
+| `parenthero://home` | Dashboard | Yes |
+| `parenthero://campaign/{topicId}/day/{1-5}` | Campaign Day View | Yes |
+| `parenthero://topic/{topicId}` | Topic Detail sheet | Yes |
+| `parenthero://settings` | Settings root | Yes |
+| `parenthero://settings/subscription` | Settings → Subscription | Yes |
+| `parenthero://arcade/{gameType}` | Arcade game | Yes |
+| `parenthero://carmode` | Car Mode | Yes |
+| `parenthero://reportcard` | Report Card | Yes |
+| `parenthero://notification/{notificationId}` | Screen mapped to notification type | Yes |
+
+**Notification → Screen Mapping:**
+
+| Notification Type | Screen Opened |
+|-------------------|-------------|
+| N01 Daily Spark | Campaign Day View (Daily Spark step) |
+| N02 Campaign reminder | Campaign Day View (current day) |
+| N03 Streak at risk | Dashboard |
+| N04 Campaign check-in | Campaign Day View (current day) |
+| N05 Streak milestone | Dashboard (streak counter highlighted) |
+| N06 Campaign complete | Campaign Day View (Day 5 complete state) |
+| N07 Certificate | Certificate screen |
+| N08 Beat the Parent ready | Campaign Day View (Day 4 Beat the Parent) |
+| N09 Pro upgrade | Paywall sheet |
+| N10-N11 Inactive | Dashboard |
+| N12 Payment issue | Settings → Subscription |
+
+**Modal vs Full-Screen:**
+- Full-screen (pushes onto navigation stack): Teaching Script, Practice Pad, Quiz, Arcade, Car Mode, Certificate, Beat the Parent
+- Bottom sheet (dismissible): Paywall, Topic Detail, Campaign completion summary, "What's Next" chooser
+- Dialog (alert): Delete account confirmation, Sign out confirmation, Clear cache confirmation
 
 ---
 
@@ -785,6 +893,51 @@ ADDING A CHILD:
 
 4. **Lazy Auth:** See Flow F (Section 6.6). Guest mode with shared_preferences until Day 2 gate.
 
+#### A.4 Phone OTP Implementation Details
+
+**OTP Flow:**
+1. User enters 10-digit phone number (India: +91 prefix added automatically; international: user selects country code)
+2. Firebase Auth sends 6-digit OTP via SMS
+3. OTP input screen: 6 individual digit boxes, auto-advance on input, auto-submit when 6th digit entered
+4. OTP expiry: 15 minutes (show countdown timer on OTP screen: "Code expires in 12:34")
+5. Resend: Available after 60-second cooldown. Button shows "Resend in 0:47" → "Resend Code" when timer expires
+6. Max attempts: 3 incorrect OTPs → block for 15 minutes ("Too many attempts. Please try again in 15 minutes.")
+7. On success: Navigate to child profile setup (new user) or Dashboard (returning user)
+
+**Error Copy:**
+
+| Error | User-facing message |
+|-------|-------------------|
+| Invalid phone | "Please enter a valid 10-digit phone number" |
+| SMS not delivered | "We couldn't send a code to this number. Try Google Sign-In instead, or check the number and try again." |
+| Rate limited by Firebase | "Too many requests. Please wait 15 minutes before trying again." |
+| OTP expired | "This code has expired. Tap 'Resend Code' to get a new one." |
+| Wrong OTP | "That code didn't match. [2 attempts remaining]" |
+
+#### A.5 Apple Sign-In Implementation
+
+**Required for:** iOS App Store submission (Apple requires Sign in with Apple when other third-party auth is offered)
+
+**Implementation:**
+- Library: `sign_in_with_apple` Flutter package
+- Scopes requested: email (optional), fullName (optional)
+- Apple may hide email — if email hidden, store Apple's relay email (e.g., `abc123@privaterelay.appleid.com`) as `email` field in Firestore
+- Display name: If Apple provides name on first sign-in, store in user doc `display_name`. On subsequent sign-ins, Apple does NOT resend name — use stored value.
+- If Apple provides no name (user deselected): show "Set Your Name" prompt after auth
+
+**Firestore `auth_method` value:** `"apple"`
+
+#### A.6 Guest Mode → Registered Account Migration
+
+**Data Migration Flow:**
+1. Guest session creates a local `guest_profile` in shared_preferences (NOT Firestore) with: child name, grade, board, active_topic_id, campaign_day_progress
+2. When user authenticates (Google/Phone/Apple), a Cloud Function `migrateGuestData` is called with: `{uid, guestData}`
+3. Cloud Function creates Firestore user doc + child doc with the guest data
+4. On success: delete shared_preferences guest_profile; app continues seamlessly
+5. If migration fails: keep shared_preferences data; retry on next app launch; user can manually trigger from Settings → Account
+
+**Merge conflict (user previously had account on same phone):** Last-write wins. Guest progress overwrites any existing Firestore progress for same topic. Show toast: "Your recent activity has been saved to your account."
+
 ### Module B: The Dashboard (Home Screen)
 
 **Purpose:** The command center. At a glance: what's active, what's popular, what's available.
@@ -877,6 +1030,23 @@ async function getWhatKidsAreLearning(grade, board) {
 }
 ```
 
+#### B.3.1 What Kids Are Learning — Launch Bootstrap Strategy
+
+The minimum threshold of 10+ active families will not be met on Day 1. Bootstrap strategy:
+
+| Phase | Threshold | Behavior |
+|-------|-----------|---------|
+| Launch Day 0-7 | 0-50 total active campaigns | Show "Popular This Month" static list (manually curated, seeded to Firestore before launch) |
+| Day 8+ | Aggregate function runs | Switch to real-time counts when ≥1 topic has 5+ active campaigns |
+| Full algorithm | Any topic has 10+ | Full algorithm per Annexure F |
+
+**Seeded "Popular This Month" fallback data:** Stored in `app_config.trending_topics_fallback` Remote Config. Updated manually by admin until real data is sufficient. Format: array of `{topicId, fake_family_count}`.
+
+**"What Kids Are Learning" board-aware filtering:**
+- Always filter by child's board AND grade
+- ICSE Grade 1 ≠ CBSE Grade 1 content — show board-matching topics only
+- If no topics match the child's board+grade combination, show CBSE Grade equivalent as fallback with label "Suggested from similar curriculum"
+
 #### B.4: Section 3 -- "Catch Up" (Conditional Row) ← NEW
 
 **Visibility:** Only shown if the user joined mid-academic-year AND has not mastered topics from earlier months.
@@ -922,6 +1092,22 @@ Catch Up · Earlier This Year 📖
 - Home = Dashboard (this screen).
 - Report Card = Parent Progress Dashboard (Module J).
 - Settings = Account, subscription, child profiles, accessibility, notifications.
+
+#### B.5.1 Streak Counter — Edge Cases
+
+**Daily Reset Timing:** Midnight in the user's local timezone (stored in `user.timezone`, populated from device locale on first app launch, updatable in Settings)
+
+**Streak Increment Logic:**
+- Streak does NOT increment on app open
+- Streak increments only when: a learning activity is marked complete (Practice Pad session ≥5 questions, Campaign day step completed, Arcade session completed, Revision check completed)
+- If streak was broken yesterday and user completes activity today: streak resets to 1 (not continued)
+- `last_activity_date` uses ISO date string in user's LOCAL timezone (e.g., "2026-02-10" = Feb 10 in user's timezone)
+
+**Visual on Dashboard:**
+- Flame icon shows current streak count
+- If streak was maintained TODAY: flame is orange/animated (color `#F97316`)
+- If last activity was YESTERDAY (streak still valid but not yet maintained today): flame is gray with count shown ("5")
+- If streak is broken (last activity was 2+ days ago): flame is absent; show "Start a new streak!" with CTA
 
 ### Module C: Campaign Day View (The Mission Hub) ← REDESIGNED
 
@@ -970,6 +1156,52 @@ Catch Up · Earlier This Year 📖
 └──────────────────────────────────────────────┘
 ```
 
+#### C.1.1 Content Pre-Generation Loading States
+
+When user pins a topic and Campaign content is being generated:
+
+**State 1 — Fast path (content already cached):**
+- Content available in <500ms
+- No loading state shown; Campaign Day View opens immediately
+
+**State 2 — Slow path (content being generated, first time):**
+- Show "Preparing [child name]'s [Topic] Campaign..." loading screen
+- Animated illustration (topic-relevant: math = pencil drawing equations, science = microscope, English = book)
+- Progress indication: "Step 1 of 5: Creating Teaching Script..." (updates as each of 5 Gemini calls completes)
+- Estimated time: "Ready in about 30 seconds"
+- Cannot navigate away during this state (full-screen loading, no back button)
+- On completion: auto-navigate to Campaign Day View Day 1
+
+**State 3 — Generation failed:**
+- After 3 retries (30s each), show error screen
+- "We had trouble preparing this campaign. [Try Again] [Choose Different Topic]"
+- "Try Again" re-triggers the Cloud Function
+- "Choose Different Topic" returns to Dashboard Library
+
+**Practice Pad Progress on Crash:**
+- Answer results are written to Hive LOCAL CACHE after EACH question answer (not at session end)
+- On app relaunch after crash: if incomplete session exists in Hive, show "Continue where you left off? [Resume] [Start Over]"
+- "Resume" restores from question N+1; "Start Over" clears the incomplete session
+
+**Campaign Day Progress Sync:**
+- Step completion is written to BOTH Hive (immediate, local) AND Firestore (async, within 5 seconds on good network)
+- Firestore write failures are queued in Hive pending_sync and retried on next connectivity
+- User never loses progress due to sync failure
+
+#### C.5 Past Days Navigation
+
+In Campaign Day View, the day indicator row shows:
+- ✅ = completed day (tappable; opens read-only replay of that day's content)
+- ● = current day (not tappable; user is already here)
+- 🔒 = locked future day (not tappable)
+- Free user on Day 4: shows paywall icon instead of 🔒
+
+**Replaying a past day:**
+- Opens the completed day's content in read-only mode (can re-read Teaching Script, review Practice Pad questions with correct answers shown, view quiz results)
+- Cannot re-submit to change scores
+- XP is NOT re-earned on replay
+- "Replay" button in Teaching Script shows "(Review)" label in past-day mode
+
 **5-Day Campaign Structure (Revised):**
 
 Each day has a core mission (3 sequential steps) that must be completed to advance. Bonus activities are always accessible (within free/pro limits).
@@ -979,8 +1211,8 @@ Each day has a core mission (3 sequential steps) that must be completed to advan
 | **Day 1: LEARN** | Understand the topic | Teaching Script | Riddle | Practice Pad (10 Qs) | Campaign content cached. Basic Arcade available. |
 | **Day 2: PRACTICE** | Build fluency | Revised Script (focus on pitfalls) | Story (topic-related) | Practice Pad (15 Qs, harder) | More Arcade levels. |
 | **Day 3: PLAY** | Gamify the learning | Quick Recap (3 key points) | Activity suggestion (physical) | Arcade Mode (full) | Full Arcade unlocked. |
-| **Day 4: CHALLENGE** | Test understanding | -- | -- | "Beat the Parent" Quiz (async) | Beat the Parent available. |
-| **Day 5: MASTER** | Prove mastery | -- | -- | "Legend Quiz" (20 Qs, mixed difficulty) | Certificate + Mastery Badge. |
+| **Day 4: CHALLENGE** | Test understanding | -- | -- | "Beat the Parent" Quiz (async): parent takes 5-question quiz; paywall triggers after submission (free users); child takes same 5 questions (Pro only) | Beat the Parent available. |
+| **Day 5: MASTER** | Prove mastery | -- | -- | "Legend Quiz" (10 Qs, mixed difficulty from `quizQuestions.legend`) | Certificate + Mastery Badge. |
 
 **Day Advancement Rules:**
 - Each day unlocks ONLY when ALL 3 core steps of the previous day are completed.
@@ -989,11 +1221,42 @@ Each day has a core mission (3 sequential steps) that must be completed to advan
 - If user completes multiple days in one sitting, that's fine -- no artificial time gates.
 - If user takes 10 real days to complete 5 activity days, that's also fine.
 
-### Module D: Assessments (Quiz / Battle)
+### Module D: Teaching Script & Assessments
 
-**Purpose:** Test understanding at various difficulty levels.
+**Purpose:** The Teaching Script guides the parent through explaining the topic. Assessments test understanding at various difficulty levels.
 
-#### D.1 Standard Quiz (within Campaign flow)
+#### D.1 Script Card Interaction Model
+
+**Card Structure:**
+- Each script is broken into 4-6 cards (max 6)
+- Card types: Hook (1), Step 1 (1), Step 2 (1), Step 3 (1), Common Pitfall (1), optional Practice Together (1)
+- Progress indicator at top: "● ● ○ ○ ○" (filled dots for read, empty for unread)
+
+**Tap-to-advance navigation:**
+- User must tap "Next →" button to advance (not swipe — prevents accidental skipping by child)
+- "← Back" button returns to previous card (available on all cards except first)
+- TTS reads the current card's text when card loads. TTS auto-pauses if user taps "← Back" or "Next →"
+- TTS "Play/Pause" button in top-right corner (▶ / ⏸ icon)
+
+**Step Completion:**
+- Teaching Script step is marked complete ONLY after user taps through to the LAST card
+- Cannot skip directly to last card from card 1
+- After last card: "Done! Ready for Practice?" → tapping "Start Practice →" marks step complete and opens Practice Pad
+
+**TTS Fallback:**
+- Android: TTS via `flutter_tts` using device TTS engine (Google TTS recommended)
+- iOS: TTS via `flutter_tts` using AVSpeechSynthesizer (built-in, no install needed)
+- TTS unavailable (no engine installed): show text-only mode with a banner: "Enable text-to-speech in your device settings for audio narration" (NOT a blocking error)
+- TTS language: English only in Phase 1. Hindi TTS when Hindi scripts added in Sprint C
+
+**"If Struggling" Block:**
+- Rendered as a collapsible card at the END of the Teaching Script (after the last regular card)
+- Default state: collapsed, showing only header "😅 Is [child name] finding this hard? Tap here"
+- On tap: expands to show the fallback teaching strategy
+- Does NOT require user to watch full script first — accessible at any time
+- Does NOT mark an extra step as complete — it's supplementary
+
+#### D.2 Standard Quiz (within Campaign flow)
 
 **Setup:**
 - Question count: Determined by Campaign day (10 on Day 1, 15 on Day 2, 20 on Legend Quiz).
@@ -1031,7 +1294,7 @@ Question displayed (child-friendly UI: large text, big buttons)
       → [Review Mistakes] [Continue]
 ```
 
-#### D.2 "Beat the Parent" Mode (Async) ← REVISED
+#### D.3 "Beat the Parent" Mode (Async) ← REVISED
 
 **Previous design:** Synchronous co-play (parent + child at same time).
 **New design:** Asynchronous challenge.
@@ -1055,6 +1318,39 @@ STEP 4: Child takes the SAME 10 questions. Score compared.
 STEP 5: Results shared with both parent and child.
   → Optional: "Share Result" → generates a shareable image for WhatsApp.
 ```
+
+#### D.3.1 Beat the Parent — Question Pool
+
+Beat the Parent uses a SEPARATE question set from the Day 5 Legend Quiz:
+- **Legend Quiz (Day 5, Step 1):** 10 MCQ questions from `content_cache.quizQuestions.legend` array
+- **Beat the Parent (Day 4, Step 2):** 5 questions from `content_cache.beatTheParent` array (separate Gemini generation call = Call 6, adding to the existing 5)
+- Total AI calls per Campaign: 6 (not 5 as previously stated). Total cost: ~$0.012 per Campaign (updated from $0.01)
+- Beat the Parent questions are HARDER by design — they include the "trap question" (Q4) and at least one multi-step problem
+
+**Score:**
+- 1 point per correct answer
+- No time weighting
+- Parent and child always answer the same 5 questions in the same order
+
+#### D.3.2 Beat the Parent — Reveal Experience
+
+**Sequence:**
+1. Parent completes their quiz → sees own score only: "You got [X]/5! Now let [child name] try"
+2. Parent hands phone to child → Child UI (large buttons, no back button) shows: "Can YOU beat Mum?" → [Start Quiz]
+3. Child completes quiz → sees own score: "[child name] got [Y]/5!"
+4. 3-second anticipation pause with drumroll audio cue (1-loop sound from assets)
+5. Reveal screen:
+   - If child wins: "[child name] WINS! 🏆 [child name]: [Y]/5 vs. You: [X]/5" + confetti animation (confetti_widget)
+   - If parent wins: "You WIN this round! 🎉 But [child name] is getting closer..." + smaller celebration
+   - If tie: "IT'S A TIE! 🤝 [X]/5 each — a perfect match!"
+6. Below result: "[Share Result 📸]" button → generates shareable card image (canvas render: child name, topic, scores, ParentHero branding)
+7. "[🏅 View Your Certificate]" button (Pro users; Day 5 available after this)
+
+**Share Card Design:**
+- 1080×1080px (Instagram square)
+- Background: topic subject color (Math = `#1CB0F6`, English = `#FF6B6B`, Science = `#58CC02`)
+- Text: "[child name] vs. Mum/Dad" · "[Topic] Challenge" · Scores side-by-side · "ParentHero" logo bottom-right
+- Generated client-side using Flutter canvas rendering to PNG, shared via native share sheet
 
 ### Module E: The Daily Spark (Retention Content) ← RENAMED & REVISED
 
@@ -1153,6 +1449,30 @@ STEP 5: Results shared with both parent and child.
 
 **Rationale:** Giving a taste of Car Mode during a commute is a powerful conversion moment. Fully locking it means the parent never discovers it.
 
+#### G.1.1 Free Tier 5-Minute Limit — UX Flow
+
+**Timer behavior:**
+- Timer starts when Car Mode session begins (content starts playing)
+- Counts DOWN from 5:00
+- At 2:00 remaining: gentle bell sound + overlay banner (non-blocking): "2 minutes left in free mode"
+- At 0:00: content pauses mid-sentence; full-screen overlay: "Your free session has ended. Keep the learning going with Pro!"
+  - [Upgrade to Pro] (primary)
+  - [End Session] (secondary, returns to Dashboard)
+- CANNOT resume the same session as free user (even if paywall is dismissed)
+- 1 free session per day: tracked in Firestore `user.car_mode_last_free_date`; resets at midnight local time
+
+**Content Sourcing Hierarchy:**
+1. Active Campaign topic (primary): questions from `content_cache` for active topic
+2. Most recently completed topic (fallback): if no active campaign, use last mastered topic
+3. Random mastered topic (if multiple): random selection from user's `mastered_topics` array
+4. If zero mastered topics: show "Start a Campaign first to unlock Car Mode content" and exit Car Mode
+
+**Session Content Flow:**
+- Mental Math DJ: 20 questions per session (pre-loaded from cache before session starts)
+- Questions rotate through EASY → MEDIUM → HARD (7 easy, 8 medium, 5 hard)
+- No repeated questions within a single session
+- After 20 questions: "Great session! [child name] answered X correctly. [Play Again] [End Session]"
+
 ### Module H: The Practice Pad (Digital Worksheet) ← REVISED LAYOUT
 
 **Purpose:** Increase session duration to 15-20 minutes. The core "practice" activity of every Campaign day.
@@ -1226,18 +1546,67 @@ The Practice Pad adapts its input method based on the subject:
 | **Science/EVS** | Identify, classify, label | MCQ buttons / Drag-to-Sort | "Which is a fruit?" → Tap the correct image |
 | **Science/EVS** | Diagram labeling | Drag labels onto image | Drag "Root," "Stem," "Leaf" onto plant diagram |
 
+#### H.2.4 Multi-Select Question Type (Science)
+
+Some Science questions require selecting ALL correct answers (not just one). This requires a new input type:
+
+**UI:** Checkbox-style grid (2×N layout)
+- Options shown as rounded-rectangle tiles with checkboxes
+- Selected state: blue border + checkmark + tinted background
+- User can select 1–4 options
+- "Check Answer" button below (greyed out until ≥1 option selected)
+- No auto-submit (unlike MCQ which auto-submits on single tap)
+
+**Correct answer logic:** ALL selected options must match the correct set exactly (order irrelevant). Partial credit is NOT given.
+
+**Example:** "Which of these are parts of a plant? [Roots ✓] [Stem ✓] [Petals ✓] [Engine ✗] [Leaves ✓]"
+
+**Data format in `content_cache.practicePadQuestions`:**
+```json
+{
+  "questionId": "sq-001",
+  "answerType": "multiSelect",
+  "correctAnswers": ["roots", "stem", "petals", "leaves"],
+  "options": ["roots", "stem", "petals", "engine", "leaves"],
+  "childExplanation": "...",
+  "parentExplanation": "..."
+}
+```
+
+#### H.4 Whiteboard Interaction Spec
+
+**Rendering:** Full-width canvas below question card, accessed by swiping left
+
+**Drawing:**
+- Single black pen only (Phase 1). Color picker and thickness in Phase 2.
+- Stroke: 3px default width, smooth bezier curves
+- Undo: removes last stroke (not per-pixel)
+- Clear: removes all strokes with confirmation ("Clear your work?")
+
+**Submission:**
+- Whiteboard is OPTIONAL — user can skip to answer without drawing
+- Drawing is NOT saved to Firestore or Hive (ephemeral per-question; cleared when moving to next question)
+- "Back to Question →" button on whiteboard navigates back to question (swipe right also works)
+
+**Timer Behavior:**
+- Timer counts UP from 0:00 (not a countdown; no time limit)
+- Timer pauses when: app goes to background, user exits Practice Pad
+- Timer DOES NOT pause when user swipes to whiteboard
+- Timer is VISIBLE in session summary at end ("You completed 10 questions in 8:34")
+- Per-question time is NOT logged to Firestore (only total session duration)
+
 #### H.3 Feedback & Results
 
 - **Per question:** Correct → green flash + sound + "+10 XP". Wrong → red flash + sound + explanation sheet (with dual-mode: child "Show Me" + parent "How to Teach").
 - **End of session:**
   ```
   🌟 Practice Complete! 🌟
-  
+
   You got 8 out of 10!  ⭐⭐⭐
   Time: 8 minutes 34 seconds
-  
+
   +80 XP earned
-  
+
   [Review Mistakes] [Try Again] [Done]
   ```
 - Wrong answers are saved for the Sunday Worksheet and Spaced Repetition system.
@@ -1275,6 +1644,51 @@ The Practice Pad adapts its input method based on the subject:
 
 **Unlock Rule:** Arcade is accessible from Day 1 of a Campaign as a "Bonus" activity. Full Arcade mode (all levels, leaderboard) unlocks after Day 3 core completion.
 
+#### I.1.1 Number Rush — Difficulty Tuning
+
+**Speed Progression:**
+- Start speed: 3.0 seconds per question (very slow)
+- On each correct answer: speed increases by 0.15 seconds (3.0 → 2.85 → 2.70...)
+- On each wrong answer: speed decreases by 0.1 seconds (slows down slightly as safety net)
+- Minimum speed: 0.75 seconds per question (max challenge, cannot go faster)
+- Speed is visually indicated by progress bar color: green (>2.0s) → yellow (1.0-2.0s) → red (<1.0s)
+
+**Session Length:** 30 questions per session (or until all 3 lives lost). Score = total correct answers.
+
+#### I.2.1 Word Builder — Difficulty Sequencing
+
+**Word presentation order (NOT random):**
+- Always start with 3 Easy words (3-4 letters, common: "cat", "dog", "sun")
+- Then 4 Medium words (4-5 letters)
+- Then 3 Hard words (6+ letters, topic-specific: "addition", "fraction")
+- Total: 10 words per session. Score = correct words in a row (streak).
+
+#### I.3.1 Sort It! — Bucket Count
+
+**3 buckets per round** (not 5; changed from original spec based on usability for Grade 1-2 children)
+- Round 1: 3 buckets, 9 items to sort (3 per bucket)
+- Round 2: 3 buckets, 12 items
+- Round 3: 3 buckets, 15 items
+
+**Drag target sizing:** Minimum 64×64dp per bucket label + 56×56dp per draggable item (accessibility minimum for touch targets for young children)
+
+#### I.4 Free Tier Quota — Specification
+
+- **"3 plays/day"** = 3 SESSION starts PER GAME TYPE per day
+  - So: 3 Number Rush sessions + 3 Word Builder sessions + 3 Sort It! sessions = up to 9 total daily plays on free tier
+- **Quota reset:** Midnight in user's local timezone (same as streak reset)
+- **Tracking:** `user.arcade_plays_today.{gameType}` counter in Firestore; reset by scheduled Cloud Function at midnight
+- **When quota reached:** "You've used your 3 free Number Rush plays today. Come back tomorrow, or get unlimited plays with Pro." Non-dismissible until user taps [OK] or [Upgrade]
+
+#### I.5 Arcade Tutorial — First Play
+
+On first session of each game type, a 1-screen tutorial overlay appears BEFORE gameplay starts:
+- Number Rush tutorial: Shows a sample question with an animated answer selection; "Tap the answer before the bar runs out!"
+- Word Builder tutorial: Shows a scrambled word with animated letter tiles; "Tap the letters in order to spell the word!"
+- Sort It! tutorial: Shows 1 item being dragged to a bucket; "Drag each item to the right bucket!"
+- Tutorial is skipped on all subsequent sessions
+- `user.arcade_tutorial_seen.{gameType}: true` stored in Firestore
+
 ### Module J: Parent Report Card (Progress Dashboard) ← NEW
 
 **Purpose:** Give parents visibility into their child's learning progress. Retention driver -- parents won't cancel a subscription when they can see growth.
@@ -1309,6 +1723,16 @@ SCIENCE/EVS   ████░░░░░░░░░░░░░░░░  25% 
 - Bar chart: Sessions per day for the last 7 days.
 - Metrics shown: Total practice time, questions answered, accuracy rate.
 
+#### J.3.1 Session Definition for Analytics
+
+A "session" for Report Card purposes = one of:
+- A completed Practice Pad run (minimum 5 questions answered)
+- A completed Campaign day step
+- A completed Arcade game (any result)
+- A completed Revision check
+
+Firestore: each session is logged as a document in `users/{uid}/children/{childId}/sessions/{sessionId}` with fields: `type`, `topic_id`, `date`, `duration_seconds`, `correct_count`, `total_count`
+
 #### J.4 Strengths & Weaknesses
 - AI-generated summary (refreshed weekly):
   ```
@@ -1318,6 +1742,29 @@ SCIENCE/EVS   ████░░░░░░░░░░░░░░░░  25% 
    questions. We recommend extra practice on this."
   ```
 - Actionable: [Practice Money Word Problems] button links to Practice Pad with filtered questions.
+
+#### J.4.1 AI Strengths & Weaknesses — Implementation
+
+**Trigger:** Cloud Function runs weekly (Sunday midnight) for all Pro users with ≥10 completed Practice Pad sessions in the past 30 days
+
+**Algorithm:**
+```
+For each topic the child has practiced:
+  topic_accuracy = correct_answers / total_answers for that topic
+  if topic_accuracy >= 0.80: mark as "strength"
+  if topic_accuracy < 0.50: mark as "needs_work"
+  if 0.50 <= topic_accuracy < 0.80: mark as "developing"
+
+Generate Gemini prompt:
+"The child in Grade [X] has practiced [topics].
+Their accuracy: [list of topic: accuracy%].
+In 2 sentences, describe their strengths and one area to focus on.
+Use encouraging, parent-friendly language. Do not mention percentages."
+```
+
+**Minimum data requirement:** If child has <10 total questions answered, show placeholder: "Keep practicing to see [child name]'s personalized insights here!" (no AI call made)
+
+**Fallback if Gemini unavailable:** Show accuracy-based static text: "[child name] is doing great on [top 2 topics]! Consider spending more time on [bottom topic]."
 
 #### J.5 Curriculum Pace Indicator ← NEW
 ```
@@ -1329,6 +1776,25 @@ Based on [CBSE] Grade [1] curriculum:
 ```
 - Compares mastered topics against `typical_month` in curriculum map.
 - Gives parents clear signal: is my child keeping up?
+
+#### J.5.1 Curriculum Pace — Algorithm
+
+```
+current_month = months_since_academic_year_start (April = 0 for India, Sept = 0 for US)
+expected_topics = curriculum_map.topics.filter(topic => topic.typical_month <= current_month)
+mastered = user.child.mastered_topics (array of topicIds)
+
+on_track_topics = expected_topics.filter(t => mastered.includes(t.topicId))
+behind_topics = expected_topics.filter(t => !mastered.includes(t.topicId))
+upcoming_topics = curriculum_map.topics.filter(topic => topic.typical_month > current_month)
+
+Pace status:
+  if behind_topics.length == 0: "ON TRACK 🎯 [X/Y topics mastered this year]"
+  if behind_topics.length <= 2: "NEARLY THERE ⚡ [behind_topics[0]] and [1 other] to catch up"
+  if behind_topics.length >= 3: "CATCHING UP 📚 [N] topics to review"
+```
+
+**UI Display:** Progress bar (on_track / expected_total), pace badge, list of behind topics with "[Start Campaign]" buttons
 
 #### J.6 Revision Alerts
 - List of mastered topics approaching revision date (see Retention Section 9.3).
@@ -1353,9 +1819,20 @@ Based on [CBSE] Grade [1] curriculum:
 | **Display Name** | Editable text field | Parent's name; optional but shown in certificate copy |
 | **Phone / Email** | Read-only with "Change" link | Triggers re-auth flow before change |
 | **Sign Out** | Destructive button | Shows confirmation dialog |
-| **Delete Account** | Destructive button (red) | Confirmation dialog + "This will delete all your data and cannot be undone." → Requires typing "DELETE" to confirm → Deletes Firestore user doc + child docs within 30 days (DPDP/GDPR) |
+| **Delete Account** | Destructive button (red) | Confirmation dialog + "This will delete all your data and cannot be undone." → Requires typing "DELETE" to confirm → Soft delete: account scheduled for deletion; permanently deleted after 30 days (DPDP/GDPR). See K.1.1 for full cascade. |
 | **Export My Data** | Action button | Generates JSON export of all user + child + progress data; delivered via email |
 | **View Data We Collect** | Info link | Opens in-app web view of Children's Privacy Addendum |
+
+#### K.1.1 Delete Account — Implementation Details
+
+**Soft delete (30-day window):**
+1. User confirms deletion (types "DELETE")
+2. Immediately: set `user.deletion_scheduled_at` in Firestore; sign user out
+3. User can re-sign-in within 30 days to cancel deletion (shows "Account scheduled for deletion on [date]. [Cancel Deletion]" banner after sign-in)
+4. After 30 days: Cloud Function permanently deletes: user doc, child doc(s), all session docs, Stripe/Razorpay customer record (via API)
+5. `content_cache` documents are NOT deleted (shared, not per-user)
+6. Firebase Auth account deleted immediately (user cannot sign in during soft-delete window)
+7. If user tries to sign up again with same email/phone within 30-day window: "An account with this email is scheduled for deletion. [Recover Account] [Create New Account]"
 
 #### K.2 Child Profiles
 
@@ -1411,8 +1888,10 @@ Shown as cards (one per child). Each card shows: Name · Grade · Board · Curre
 
 | Setting | Default | Notes | Phase |
 |---------|---------|-------|-------|
-| **Sound Effects** | ON | Toggle for all game sounds, celebration sounds | Phase 2 |
-| **Volume** | 80% | Slider (0-100%) | Phase 2 |
+| **Sound Effects** | ON | Toggle for all game sounds, celebration sounds | Sprint B |
+| **Volume** | 80% | Slider (0-100%) | Sprint B |
+
+**Note on phasing:** Sound effects in gameplay (Arcade, Practice Pad correct/wrong feedback, Beat the Parent drumroll, celebration sounds) are implemented in Sprint B (Week 15), not Phase 2. The Settings toggle for sound effects is also added in Sprint B. The "Phase 2" label previously listed here was incorrect — Phase 2 refers to advanced accessibility features and the full offline content management section (K.7), not sound effects.
 
 #### K.7 Offline Content (Phase 2)
 
@@ -1447,7 +1926,7 @@ Shown as cards (one per child). Each card shows: Name · Grade · Board · Curre
 | **Scan Diary/Worksheet** | 3 scans/day | Unlimited |
 | **5-Day Campaign** | **Days 1-3 (Learn, Practice, Play)** | **Full Day 1-5** |
 | **Practice Pad** | 10 questions/day | Unlimited |
-| **Arcade** | 5 lives/day | Unlimited lives + all levels |
+| **Arcade** | 3 session starts/day per game type (see Section I.4) | Unlimited plays + all levels |
 | **"Beat the Parent"** | Locked | Unlocked |
 | **Car Mode** | 5 min/session, 1 session/day | Unlimited |
 | **Sunday Printer - Certificate** | 1 free/month | Unlimited |
@@ -1540,7 +2019,7 @@ User taps "Start Day 4" →
 
 **Why this moment works:** The parent has already invested effort (answered 5 quiz questions), making the paywall emotionally compelling — they want to see how their child compares. The reveal (child vs. parent scores) is locked behind Pro, creating a natural desire to unlock.
 
-**Note on question count:** Beat the Parent uses 5 questions (not 10 as referenced in some earlier descriptions). See Section D.2.1 for the authoritative question count.
+**Note on question count:** Beat the Parent uses 5 questions (not 10 as referenced in some earlier descriptions). See Section D.3.1 for the authoritative question count.
 
 **Paywall Sheet Design:**
 - Child's name and topic used in copy (personalized)
@@ -1599,6 +2078,18 @@ When a subscription fails renewal or is cancelled:
 - 6 PM (if no activity yet): "🔥 [Ira]'s [X]-day streak is still going! Do a quick 5-question practice to keep it alive."
 - 9 PM (last chance): "⚠️ Last chance! [Ira]'s [X]-day streak ends at midnight."
 
+#### 9.1.1 Streak — Edge Cases
+
+**Freeze Auto-Apply Logic:**
+- At 12:01 AM local time, a Cloud Function checks all users whose `last_activity_date` is 2 days ago (streak would break)
+- IF user has `streak_freezes_remaining > 0`: auto-decrement freeze counter, keep streak alive, set `last_activity_date` to yesterday
+- IF user has 0 freezes: mark streak as broken; reset `current_streak` to 0
+- User receives N03 notification at 8 PM if streak is at risk (before midnight check)
+
+**Freeze Availability Display:**
+- Show freeze count as ice crystal icon next to streak counter on Dashboard: "🔥 12 🧊×2" (12-day streak, 2 freezes remaining)
+- Free users: 1 freeze/month. Pro: 3 freezes/month.
+
 ### 9.2 XP & Level System ← NEW (Fully Designed)
 
 **Purpose:** Give children a sense of progression and achievement that spans across Campaigns.
@@ -1641,6 +2132,18 @@ When a subscription fails renewal or is cancelled:
 - Share button: Generate an image showing the level-up (viral loop for WhatsApp).
 
 **Important:** This is a PERSONAL progression system. We do NOT show global leaderboards or compare children. Each child's journey is their own.
+
+#### 9.2.1 XP Earning — Timing Rules
+
+- XP is earned AT THE MOMENT of activity completion (not batched or delayed)
+- XP is written to Firestore immediately + synced to Hive local cache
+- If offline: XP is stored in Hive pending_sync queue; Firestore updated on reconnection
+- XP is NOT retroactively earned for activities done while offline (already counted in local cache; sync writes Firestore to match)
+
+**Campaign Day XP:**
+- Each of the 3 steps earns +50 XP upon step completion
+- Day completion bonus (+25 XP) awarded when all 3 steps for a given day are completed
+- If Step 1 completed on Monday and Steps 2+3 on Tuesday: +50 (Mon) + 50 (Tue) + 50 (Tue) + 25 (Tue) = 175 XP total, across 2 sessions
 
 ### 9.3 Spaced Repetition (Revision Ring) ← NEW
 
@@ -1700,7 +2203,7 @@ For each mastered topic:
 | N04 | Campaign progress | 7:00 PM | Campaign check-in 📊 | "Day [X] of [Topic]: [Step name] is ready! [Y] minutes to complete." | Daily during active Campaign (if day not completed) |
 | N05 | Campaign content ready | Immediate | Ready to go! 🚀 | "[Ira]'s [Topic] Campaign is prepared! Start Day 1 now." | Once per Campaign |
 | N06 | Post-Campaign | Day after Day 5 | What's next? 🌟 | "After mastering [Topic], how about [Recommended Topic]? 312 families are doing it!" | Once |
-| N07 | Beat the Parent | Campaign Day 4 | Challenge time! 🏆 | "Can you outscore [Ira] on [Topic]? Take the 10-question parent challenge!" | Once per Campaign |
+| N07 | Beat the Parent | Campaign Day 4 | Challenge time! 🏆 | "Can you outscore [Ira] on [Topic]? Take the 5-question parent challenge!" | Once per Campaign |
 | N08 | Sunday Printer | Sunday 9 AM | Sunday Rewards! 🖨️ | "[Ira]'s Certificate and Worksheet are ready to print!" | Weekly (Sundays) |
 | N09 | Revision due | 10 AM | Quick review 🧠 | "[Topic] mastered [X] weeks ago. 5 questions to keep the Gold badge!" | Max 1/day |
 | N10 | 48h inactive | 48h after last open | We miss you! | "[Ira] is on Day [X] of [Topic] -- just [Y] more days to the certificate! 🏅" | Once per inactive period |
@@ -1882,6 +2385,38 @@ Set up Firebase Analytics custom dashboards for:
 - AI prompts NEVER include PII. Template: "Generate questions for Grade [X], [Board], Topic [Y]." No child name, no user ID.
 - AI-generated content is cached and shared across users (same Grade + Board + Topic = same content). No per-child personalization in AI prompts.
 - AI provider (Google Gemini) data processing agreement must be in place before launch.
+
+### 12.5 US Parental Consent Flow (COPPA)
+
+**Trigger:** When `user.country_code == "US"` AND user has a child profile
+
+**Flow — inserted between Onboarding Step 3 (child profile) and Step 4 (First Topic Wizard):**
+
+Screen: "One quick step for US families"
+```
+Header: "Confirming You're a Parent"
+
+Body: "US privacy law (COPPA) requires us to verify that you're a parent
+or guardian before collecting any information about your child."
+
+Option 1 [Verify with Card]:
+"We'll charge $0.00 to your card (immediately refunded) to confirm you're an adult."
+→ Opens Stripe payment sheet with $0 charge
+→ On success: set user.coppa_verified: true, continue to Step 4
+
+Option 2 [Verify by Government ID]:
+"Upload a photo of your government-issued ID. It's reviewed by our team and then permanently deleted."
+→ Opens camera/file picker → uploads to temporary Cloud Storage (auto-deleted after 48h)
+→ Email notification to admin for manual verification
+→ Shows "Verification pending" screen; child profile created but limited to 3 questions/day until verified
+→ On admin approval: push notification "Your account is verified! Full access unlocked."
+
+[Already verified? Sign in] → for returning users
+```
+
+**Returning US users:** `user.coppa_verified: true` stored in Firestore. Consent flow skipped on re-auth.
+
+**Non-US users:** Consent flow skipped entirely. No parental verification required (DPDP/GDPR handled via Terms acceptance at signup).
 
 ---
 
@@ -2552,7 +3087,7 @@ OUTPUT FORMAT: Return a JSON object with this exact structure:
   "arcade_data": {
     "number_rush": {"problems": [{"q": "expression", "a": number, "wrong_options": [3 wrong numbers]}]}
   },
-  "beat_the_parent": [10 MCQ questions: {"q": "text", "options": ["A","B","C","D"], "correct": 0-3}],
+  "beat_the_parent": [5 MCQ questions (harder, includes at least 1 trap question and 1 multi-step problem): {"q": "text", "options": ["A","B","C","D"], "correct": 0-3}],
   "certificate_title": "topic mastery title for certificate"
 }
 
@@ -2671,7 +3206,7 @@ RULES:
     },
     "N07_beat_the_parent": {
       "title": "Challenge time! 🏆",
-      "body": "Can you outscore ${child_name} on ${topic_name}? Take the 10-question parent challenge!"
+      "body": "Can you outscore ${child_name} on ${topic_name}? Take the 5-question parent challenge!"
     },
     "N08_sunday_printer": {
       "title": "Sunday Rewards! 🖨️",
