@@ -1523,16 +1523,24 @@ Install → Paid:                    ~3-5%
 The Day 4 paywall uses a **soft gate** (preview → prompt) rather than a hard block. This respects the user's experience while driving conversion.
 
 **Soft Gate Flow:**
+
+> **Note on Day 4 structure:** Day 4 has a single campaign step — the "Beat the Parent" async quiz (parent takes the quiz). There are NOT 2 separate steps. The soft gate is timed to the completion of that one step, not a 2-minute timer.
+
 ```
 User taps "Start Day 4" →
-  Show Day 4 content normally for 2 minutes (exactly 2 campaign steps)
-  → Pause with overlay: "You're on a roll! [Child name] is mastering [Topic]."
-  → Show paywall sheet (bottom sheet, non-dismissible):
-      "Unlock Day 4 & 5 — the Legend Quiz and your Certificate await."
+  Show Day 4 content: the Beat the Parent parent quiz (parent answers all 5 questions)
+  → After parent submits their quiz answers (Step 1 complete):
+      Immediately show paywall sheet (bottom sheet, non-dismissible)
+      Copy: "You answered [score]/5! Unlock Day 4-5 to see how [child name] does —
+             and earn the certificate."
       [₹299/month]  [₹1,999/year — Save 44%]
       [Restore Purchase]
-  → If user closes: return to Dashboard with banner "Day 4 unlocked when you go Pro"
+  → If user taps "Maybe Later": return to Dashboard with banner "Day 4 unlocked when you go Pro"
 ```
+
+**Why this moment works:** The parent has already invested effort (answered 5 quiz questions), making the paywall emotionally compelling — they want to see how their child compares. The reveal (child vs. parent scores) is locked behind Pro, creating a natural desire to unlock.
+
+**Note on question count:** Beat the Parent uses 5 questions (not 10 as referenced in some earlier descriptions). See Section D.2.1 for the authoritative question count.
 
 **Paywall Sheet Design:**
 - Child's name and topic used in copy (personalized)
