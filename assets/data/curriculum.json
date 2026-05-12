@@ -1,0 +1,368 @@
+{
+  "topics": [
+    {
+      "id": "g1_m_numbers_1_20",
+      "grade": 1,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Numbers 1–20",
+      "subtitle": "Counting and writing numbers",
+      "color": "#1CB0F6",
+      "icon": "123",
+      "days": [
+        {
+          "day": 1,
+          "subtopic": "Counting 1 to 10",
+          "script": "Hook: Hold up your fingers one by one and count together!\n\nStep 1: Numbers 1 to 5 are our first friends. Point to each finger: one, two, three, four, five! Each number has a name and a symbol we write.\n\nStep 2: Now 6 to 10. Show both hands. Six is one more than five. Count on: six, seven, eight, nine, ten! Ten fingers, ten toes!\n\nStep 3: Let your child count 10 objects around the house — spoons, books, toys.\n\nPitfall: Children often skip a number or count one object twice. Slow down and touch each object as you count.",
+          "practice": [
+            {"q": "How many fingers on one hand?", "a": "5", "type": "numeric"},
+            {"q": "What comes after 3?", "a": "4", "type": "numeric"},
+            {"q": "What comes after 7?", "a": "8", "type": "numeric"},
+            {"q": "Count: 1, 2, 3, __, 5", "a": "4", "type": "numeric"},
+            {"q": "How many eyes do you have?", "a": "2", "type": "numeric"},
+            {"q": "What is 1 more than 9?", "a": "10", "type": "numeric"},
+            {"q": "What comes before 6?", "a": "5", "type": "numeric"},
+            {"q": "Count backwards: 5, 4, 3, __, 1", "a": "2", "type": "numeric"},
+            {"q": "How many toes on both feet?", "a": "10", "type": "numeric"},
+            {"q": "What number is between 7 and 9?", "a": "8", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "Which number comes after 5?", "options": ["4","6","7","8"], "answer": 1, "explanation": "After 5 comes 6. We count: 1,2,3,4,5,6!"},
+            {"q": "How many fingers are on 2 hands?", "options": ["8","9","10","12"], "answer": 2, "explanation": "Each hand has 5 fingers. 5+5=10!"},
+            {"q": "What number comes before 4?", "options": ["2","3","5","6"], "answer": 1, "explanation": "Before 4 comes 3. Count back: 5,4,3!"},
+            {"q": "Which is the biggest number?", "options": ["3","7","5","9"], "answer": 3, "explanation": "9 is the biggest. It comes last when we count 1 to 9!"},
+            {"q": "Count: 1,2,__,4,5", "options": ["1","3","6","7"], "answer": 1, "explanation": "The missing number is 3. It comes between 2 and 4!"}
+          ]
+        },
+        {
+          "day": 2,
+          "subtopic": "Numbers 11 to 20",
+          "script": "Hook: Yesterday we learned 1-10. Today we go further!\n\nStep 1: 11 is ten and one more. 12 is ten and two more. Show with two groups of objects.\n\nStep 2: Count from 11 to 20 together. These are called 'teen' numbers (except 11 and 12).\n\nStep 3: Write the numbers 11-20 together.\n\nPitfall: Children confuse 12 and 20, or 13 and 30. Say them clearly and slowly.",
+          "practice": [
+            {"q": "What comes after 10?", "a": "11", "type": "numeric"},
+            {"q": "What comes after 15?", "a": "16", "type": "numeric"},
+            {"q": "What is between 12 and 14?", "a": "13", "type": "numeric"},
+            {"q": "What comes before 20?", "a": "19", "type": "numeric"},
+            {"q": "What is 1 more than 17?", "a": "18", "type": "numeric"},
+            {"q": "Count: 14, 15, __, 17", "a": "16", "type": "numeric"},
+            {"q": "What comes after 18?", "a": "19", "type": "numeric"},
+            {"q": "What is 1 less than 12?", "a": "11", "type": "numeric"},
+            {"q": "Count: 11, __, 13, 14", "a": "12", "type": "numeric"},
+            {"q": "What is the largest number up to 20?", "a": "20", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "What number comes after 19?", "options": ["18","20","21","17"], "answer": 1, "explanation": "After 19 comes 20. That's the last teen number!"},
+            {"q": "Which number is between 13 and 15?", "options": ["12","16","14","11"], "answer": 2, "explanation": "14 is between 13 and 15!"},
+            {"q": "Count: 16, 17, __, 19", "options": ["15","20","18","16"], "answer": 2, "explanation": "18 comes between 17 and 19!"},
+            {"q": "Which is smallest?", "options": ["15","11","18","20"], "answer": 1, "explanation": "11 is the smallest teen number!"},
+            {"q": "11 is ten and __ more", "options": ["2","1","3","0"], "answer": 1, "explanation": "11 = 10 + 1. One more than ten!"}
+          ]
+        },
+        {
+          "day": 3,
+          "subtopic": "Ordering and comparing numbers",
+          "script": "Hook: Which is more — 5 apples or 8 apples?\n\nStep 1: We use > (greater than) and < (less than). The mouth always eats the BIGGER number!\n\nStep 2: Practice: 7 > 3, 4 < 9. The open side faces the bigger number.\n\nStep 3: Order these numbers from smallest to biggest: 12, 5, 18, 3, 9.\n\nPitfall: Children mix up > and <. The trick: the pointy end points to the SMALLER number.",
+          "practice": [
+            {"q": "Which is bigger: 7 or 12?", "a": "12", "type": "numeric"},
+            {"q": "Which is smaller: 15 or 9?", "a": "9", "type": "numeric"},
+            {"q": "Put in order (smallest first): 8, 3, 15 — what is first?", "a": "3", "type": "numeric"},
+            {"q": "What is the biggest: 11, 17, 6?", "a": "17", "type": "numeric"},
+            {"q": "Which is smaller: 13 or 18?", "a": "13", "type": "numeric"},
+            {"q": "How many numbers are between 5 and 10?", "a": "4", "type": "numeric"},
+            {"q": "What is 1 more than 14?", "a": "15", "type": "numeric"},
+            {"q": "Which is bigger: 20 or 16?", "a": "20", "type": "numeric"},
+            {"q": "Put in order — what comes last: 4, 9, 14?", "a": "14", "type": "numeric"},
+            {"q": "What is 1 less than 20?", "a": "19", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "Which number is greater: 14 or 8?", "options": ["8","14","Both equal","Can't tell"], "answer": 1, "explanation": "14 is greater than 8. 14 comes later when we count!"},
+            {"q": "Arrange smallest first: 17, 3, 11, 7", "options": ["3,7,11,17","17,11,7,3","7,3,11,17","3,11,7,17"], "answer": 0, "explanation": "Smallest to biggest: 3, 7, 11, 17!"},
+            {"q": "Which symbol fits: 5 __ 12?", "options": [">","<","=","+"], "answer": 1, "explanation": "5 < 12. The mouth eats the bigger number (12)!"},
+            {"q": "What is between 9 and 11?", "options": ["8","10","12","13"], "answer": 1, "explanation": "10 is between 9 and 11!"},
+            {"q": "Which is the smallest?", "options": ["13","17","2","9"], "answer": 2, "explanation": "2 is the smallest — it comes first when we count!"}
+          ]
+        },
+        {
+          "day": 4,
+          "subtopic": "Number names and writing practice",
+          "script": "Hook: Every number has a name — like you have a name!\n\nStep 1: Teach number names: one, two, three... up to twenty. Write them out.\n\nStep 2: Match: 7 = seven, 15 = fifteen, 20 = twenty.\n\nStep 3: Quiz game — say a number word, child writes the digit.\n\nPitfall: 'Fourteen' vs 'Forty', 'Fifteen' vs 'Fifty' are often confused. Emphasize the '-teen' ending.",
+          "practice": [
+            {"q": "Write the number: twelve", "a": "12", "type": "numeric"},
+            {"q": "Write the number: seventeen", "a": "17", "type": "numeric"},
+            {"q": "Write the number: nineteen", "a": "19", "type": "numeric"},
+            {"q": "Write the number: eleven", "a": "11", "type": "numeric"},
+            {"q": "Write the number: fifteen", "a": "15", "type": "numeric"},
+            {"q": "Write the number: twenty", "a": "20", "type": "numeric"},
+            {"q": "Write the number: thirteen", "a": "13", "type": "numeric"},
+            {"q": "Write the number: sixteen", "a": "16", "type": "numeric"},
+            {"q": "Write the number: fourteen", "a": "14", "type": "numeric"},
+            {"q": "Write the number: eighteen", "a": "18", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "What is the number name for 14?", "options": ["Forty","Fourteen","Forteen","Four-teen"], "answer": 1, "explanation": "14 is fourteen. It ends with '-teen'!"},
+            {"q": "What number is 'seventeen'?", "options": ["7","70","17","71"], "answer": 2, "explanation": "Seventeen = 17. Seven-TEEN means 10 + 7!"},
+            {"q": "What is the number name for 20?", "options": ["Two","Twenty","Twelve","Twonly"], "answer": 1, "explanation": "20 is twenty. The biggest number we learned!"},
+            {"q": "What number is 'eleven'?", "options": ["1","10","11","21"], "answer": 2, "explanation": "Eleven = 11. It's the first number after 10!"},
+            {"q": "What is 'nineteen' in digits?", "options": ["9","90","91","19"], "answer": 3, "explanation": "Nineteen = 19. Nine-TEEN = 10 + 9!"}
+          ]
+        },
+        {
+          "day": 5,
+          "subtopic": "Review and Assessment",
+          "script": "Recap: Today we review everything about numbers 1-20!\n\n• Counting 1-20 in order\n• Comparing: bigger and smaller\n• Ordering numbers\n• Number names\n\nPlay: I say a number name, you write it. I hold up fingers, you say the number. Race to 20!",
+          "practice": [
+            {"q": "What comes after 11?", "a": "12", "type": "numeric"},
+            {"q": "What is bigger: 9 or 15?", "a": "15", "type": "numeric"},
+            {"q": "Write: thirteen", "a": "13", "type": "numeric"},
+            {"q": "What comes before 8?", "a": "7", "type": "numeric"},
+            {"q": "Count: 17, 18, __, 20", "a": "19", "type": "numeric"},
+            {"q": "Which is smallest: 14, 6, 19?", "a": "6", "type": "numeric"},
+            {"q": "Write: sixteen", "a": "16", "type": "numeric"},
+            {"q": "What is 1 more than 16?", "a": "17", "type": "numeric"},
+            {"q": "What is 1 less than 15?", "a": "14", "type": "numeric"},
+            {"q": "Count backwards from 5: 5,4,3,2,__", "a": "1", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "What comes after 18?", "options": ["17","19","20","16"], "answer": 1, "explanation": "After 18 comes 19!"},
+            {"q": "Which is the biggest?", "options": ["12","18","9","15"], "answer": 1, "explanation": "18 is the biggest among these numbers!"},
+            {"q": "What is 'twelve' in digits?", "options": ["2","20","21","12"], "answer": 3, "explanation": "Twelve = 12!"},
+            {"q": "What is 1 less than 14?", "options": ["15","13","12","11"], "answer": 1, "explanation": "1 less than 14 is 13!"},
+            {"q": "Smallest first: 16, 4, 11", "options": ["4,11,16","16,11,4","11,4,16","4,16,11"], "answer": 0, "explanation": "Smallest to biggest: 4, 11, 16!"},
+            {"q": "What comes before 7?", "options": ["8","6","9","5"], "answer": 1, "explanation": "Before 7 comes 6!"},
+            {"q": "How many numbers from 1 to 10?", "options": ["9","11","10","8"], "answer": 2, "explanation": "1,2,3,4,5,6,7,8,9,10 — that's 10 numbers!"},
+            {"q": "Which number name matches 15?", "options": ["Fifty","Fifteen","Five","Fiveteen"], "answer": 1, "explanation": "15 = Fifteen!"},
+            {"q": "What is between 10 and 12?", "options": ["9","13","11","10"], "answer": 2, "explanation": "11 is between 10 and 12!"},
+            {"q": "Count: 13, 14, __, 16", "options": ["12","17","15","18"], "answer": 2, "explanation": "15 comes between 14 and 16!"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "g1_m_add_basic",
+      "grade": 1,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Addition (Single Digit)",
+      "subtitle": "Putting numbers together",
+      "color": "#1CB0F6",
+      "icon": "add",
+      "days": [
+        {
+          "day": 1,
+          "subtopic": "Concept of addition — putting together",
+          "script": "Hook: Show me 2 fingers on your left hand. Now show 3 fingers on your right hand. Count ALL fingers — how many? Five! You just did addition!\n\nStep 1: Addition means PUTTING TOGETHER. When you have some things and get more, you count them all — that's addition! Pick up 2 spoons, then 3 more. Put together. Count: 5! We write 2 + 3 = 5.\n\nStep 2: Try 4 + 1. Take 4 toy cars. Add 1 more. Count: 5! So 4 + 1 = 5.\n\nStep 3: Let your child make one up! Pick objects, make two groups, put together, count.\n\nPitfall: Children count both groups from 1. For 3+2, they say '1,2,3' then '1,2' and say '2'. Teach them to CONTINUE counting: '3...4, 5!'",
+          "practice": [
+            {"q": "2 + 3 = ?", "a": "5", "type": "numeric"},
+            {"q": "1 + 4 = ?", "a": "5", "type": "numeric"},
+            {"q": "3 + 3 = ?", "a": "6", "type": "numeric"},
+            {"q": "5 + 2 = ?", "a": "7", "type": "numeric"},
+            {"q": "4 + 4 = ?", "a": "8", "type": "numeric"},
+            {"q": "6 + 1 = ?", "a": "7", "type": "numeric"},
+            {"q": "2 + 6 = ?", "a": "8", "type": "numeric"},
+            {"q": "5 + 3 = ?", "a": "8", "type": "numeric"},
+            {"q": "4 + 5 = ?", "a": "9", "type": "numeric"},
+            {"q": "3 + 6 = ?", "a": "9", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "2 + 3 = ?", "options": ["4","5","6","7"], "answer": 1, "explanation": "2 + 3 = 5. Count on: 2...3,4,5!"},
+            {"q": "4 + 1 = ?", "options": ["3","4","5","6"], "answer": 2, "explanation": "4 + 1 = 5. One more than 4 is 5!"},
+            {"q": "3 + 4 = ?", "options": ["6","7","8","9"], "answer": 1, "explanation": "3 + 4 = 7. Count on from 4: 5,6,7!"},
+            {"q": "5 + 2 = ?", "options": ["6","7","8","9"], "answer": 1, "explanation": "5 + 2 = 7. Count on: 5...6,7!"},
+            {"q": "What does + mean?", "options": ["Take away","Put together","Count back","Equals"], "answer": 1, "explanation": "The + sign means PUT TOGETHER or add!"}
+          ]
+        },
+        {
+          "day": 2,
+          "subtopic": "Count-on strategy",
+          "script": "Hook: Yesterday we counted all objects. Today we use a SHORTCUT!\n\nStep 1: The count-on trick. For 5+3: put 5 in your head, then count on: 6, 7, 8! Much faster than counting all 8 from 1.\n\nStep 2: Use fingers as a counter. For 4+3: hold up 3 fingers, say '4' in your head, tap each finger: 5, 6, 7. Last number is the answer!\n\nStep 3: Practice 6+2 using count-on.\n\nPitfall: Children sometimes count the starting number too. '5+3': they say '5,6,7' and get 7. Remind them to START from 5 and count ON 3 more.",
+          "practice": [
+            {"q": "6 + 2 = ?", "a": "8", "type": "numeric"},
+            {"q": "7 + 1 = ?", "a": "8", "type": "numeric"},
+            {"q": "5 + 4 = ?", "a": "9", "type": "numeric"},
+            {"q": "8 + 1 = ?", "a": "9", "type": "numeric"},
+            {"q": "6 + 3 = ?", "a": "9", "type": "numeric"},
+            {"q": "7 + 2 = ?", "a": "9", "type": "numeric"},
+            {"q": "4 + 3 = ?", "a": "7", "type": "numeric"},
+            {"q": "5 + 1 = ?", "a": "6", "type": "numeric"},
+            {"q": "3 + 5 = ?", "a": "8", "type": "numeric"},
+            {"q": "2 + 7 = ?", "a": "9", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "Count on from 6: 6 + 3 = ?", "options": ["8","9","10","7"], "answer": 1, "explanation": "Start at 6, count on 3: 7,8,9. Answer is 9!"},
+            {"q": "7 + 2 = ?", "options": ["8","9","10","7"], "answer": 1, "explanation": "Start at 7, count on 2: 8,9. Answer is 9!"},
+            {"q": "8 + 1 = ?", "options": ["7","8","9","10"], "answer": 2, "explanation": "Start at 8, count on 1: 9. Answer is 9!"},
+            {"q": "5 + 4 = ?", "options": ["8","9","10","7"], "answer": 1, "explanation": "Start at 5, count on 4: 6,7,8,9. Answer is 9!"},
+            {"q": "Which is the same as 4+5?", "options": ["4+4","5+4","3+5","6+4"], "answer": 1, "explanation": "4+5 = 5+4. You can swap the numbers and the answer is the same!"}
+          ]
+        },
+        {
+          "day": 3,
+          "subtopic": "Addition facts (sums to 10)",
+          "script": "Hook: Let's become SUPER FAST at addition!\n\nStep 1: These are the addition facts you need to know by heart (sums to 10):\n1+9, 2+8, 3+7, 4+6, 5+5 — all equal 10!\n\nStep 2: Friends of 10 — pairs that make 10. Use your fingers.\n\nStep 3: Flash practice: point to pairs, child shouts the answer fast.\n\nPitfall: Don't rush memory before understanding. Make sure they can count-on first.",
+          "practice": [
+            {"q": "5 + 5 = ?", "a": "10", "type": "numeric"},
+            {"q": "4 + 6 = ?", "a": "10", "type": "numeric"},
+            {"q": "3 + 7 = ?", "a": "10", "type": "numeric"},
+            {"q": "2 + 8 = ?", "a": "10", "type": "numeric"},
+            {"q": "1 + 9 = ?", "a": "10", "type": "numeric"},
+            {"q": "6 + 4 = ?", "a": "10", "type": "numeric"},
+            {"q": "7 + 3 = ?", "a": "10", "type": "numeric"},
+            {"q": "8 + 2 = ?", "a": "10", "type": "numeric"},
+            {"q": "9 + 1 = ?", "a": "10", "type": "numeric"},
+            {"q": "0 + 10 = ?", "a": "10", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "Which pair makes 10?", "options": ["4+5","3+6","4+6","5+6"], "answer": 2, "explanation": "4+6=10. These are friends of 10!"},
+            {"q": "5 + ? = 10", "options": ["4","5","6","7"], "answer": 1, "explanation": "5+5=10. Five is its own friend!"},
+            {"q": "2 + 8 = ?", "options": ["9","10","11","12"], "answer": 1, "explanation": "2+8=10. They are friends of 10!"},
+            {"q": "Which does NOT make 10?", "options": ["3+7","6+4","5+5","4+5"], "answer": 3, "explanation": "4+5=9, not 10!"},
+            {"q": "9 + 1 = ?", "options": ["9","10","11","8"], "answer": 1, "explanation": "9+1=10. Just one more to reach 10!"}
+          ]
+        },
+        {
+          "day": 4,
+          "subtopic": "Addition facts (sums 11–18)",
+          "script": "Hook: We know friends of 10. Now let's add BEYOND 10!\n\nStep 1: 9+5. Think: 9+1=10, then 4 more = 14.\n\nStep 2: Make-10 strategy: break the smaller number to make 10 first, then add the rest.\n\nStep 3: 8+6: 8+2=10, then 4 more = 14.\n\nPitfall: Children want to count all objects. Guide them toward the make-10 strategy.",
+          "practice": [
+            {"q": "9 + 5 = ?", "a": "14", "type": "numeric"},
+            {"q": "8 + 6 = ?", "a": "14", "type": "numeric"},
+            {"q": "7 + 8 = ?", "a": "15", "type": "numeric"},
+            {"q": "9 + 9 = ?", "a": "18", "type": "numeric"},
+            {"q": "8 + 8 = ?", "a": "16", "type": "numeric"},
+            {"q": "7 + 7 = ?", "a": "14", "type": "numeric"},
+            {"q": "9 + 6 = ?", "a": "15", "type": "numeric"},
+            {"q": "8 + 7 = ?", "a": "15", "type": "numeric"},
+            {"q": "9 + 8 = ?", "a": "17", "type": "numeric"},
+            {"q": "6 + 7 = ?", "a": "13", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "9 + 5 = ?", "options": ["13","14","15","16"], "answer": 1, "explanation": "9+1=10, then 4 more = 14!"},
+            {"q": "8 + 7 = ?", "options": ["14","15","16","13"], "answer": 1, "explanation": "8+2=10, then 5 more = 15!"},
+            {"q": "9 + 9 = ?", "options": ["17","18","19","16"], "answer": 1, "explanation": "9+9=18. Double 9!"},
+            {"q": "7 + 8 = ?", "options": ["14","15","16","13"], "answer": 1, "explanation": "7+3=10, then 5 more = 15!"},
+            {"q": "6 + 8 = ?", "options": ["13","14","15","12"], "answer": 1, "explanation": "6+4=10, then 4 more = 14!"}
+          ]
+        },
+        {
+          "day": 5,
+          "subtopic": "Word problems and review",
+          "script": "Recap: We know how to add! Today we solve STORY problems.\n\n• Read the problem carefully\n• Find the two numbers\n• Add them\n• Write the answer with units (apples, rupees, etc.)\n\nExample: 'Priya has 5 pencils. She gets 3 more. How many does she have?' → 5 + 3 = 8 pencils.",
+          "practice": [
+            {"q": "Riya has 4 books. She gets 3 more. How many books?", "a": "7", "type": "numeric"},
+            {"q": "There are 5 birds on a tree. 4 more come. Total birds?", "a": "9", "type": "numeric"},
+            {"q": "Amit has 6 marbles. He wins 2 more. How many marbles?", "a": "8", "type": "numeric"},
+            {"q": "7 blue balls + 3 red balls = ? balls total", "a": "10", "type": "numeric"},
+            {"q": "Mum buys 8 apples and 6 oranges. Total fruits?", "a": "14", "type": "numeric"},
+            {"q": "5 + 5 + 5 = ?", "a": "15", "type": "numeric"},
+            {"q": "There were 9 fish. 7 more swim in. Total?", "a": "16", "type": "numeric"},
+            {"q": "8 + 8 = ?", "a": "16", "type": "numeric"},
+            {"q": "9 + 8 = ?", "a": "17", "type": "numeric"},
+            {"q": "9 + 9 = ?", "a": "18", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "Sara has 6 pens. She gets 5 more. How many?", "options": ["10","11","12","13"], "answer": 1, "explanation": "6+5=11 pens!"},
+            {"q": "8 + 7 = ?", "options": ["14","15","16","13"], "answer": 1, "explanation": "8+7=15!"},
+            {"q": "There are 9 cats and 6 dogs. How many animals?", "options": ["14","15","16","13"], "answer": 1, "explanation": "9+6=15 animals!"},
+            {"q": "Which is correct? 5 + 4 = ?", "options": ["8","9","10","7"], "answer": 1, "explanation": "5+4=9!"},
+            {"q": "4 + 4 + 4 = ?", "options": ["10","11","12","13"], "answer": 2, "explanation": "4+4=8, then 8+4=12!"},
+            {"q": "9 + 9 = ?", "options": ["17","18","19","16"], "answer": 1, "explanation": "9+9=18. Double 9!"},
+            {"q": "Rina wins 7 candies on Monday, 8 on Tuesday. Total?", "options": ["14","15","16","13"], "answer": 1, "explanation": "7+8=15 candies!"},
+            {"q": "What is 1 more than 17?", "options": ["16","18","19","20"], "answer": 1, "explanation": "1 more than 17 is 18!"},
+            {"q": "6 + 9 = ?", "options": ["14","15","16","13"], "answer": 1, "explanation": "6+4=10, then 5 more = 15!"},
+            {"q": "7 + 7 = ?", "options": ["13","14","15","12"], "answer": 1, "explanation": "7+7=14. Double 7!"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "g1_m_sub_basic",
+      "grade": 1,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Subtraction (No Borrow)",
+      "subtitle": "Taking away numbers",
+      "color": "#1CB0F6",
+      "icon": "remove",
+      "days": [
+        {
+          "day": 1, "subtopic": "Concept of subtraction — taking away",
+          "script": "Hook: You have 5 chocolates. You eat 2. How many are left?\n\nStep 1: Subtraction means TAKING AWAY. Show 7 objects. Take away 3. Count what's left.\n\nStep 2: Write: 7 - 3 = 4. The minus sign '-' means take away.\n\nStep 3: Let child practice with objects.\n\nPitfall: Children confuse which number to start from. Always start with the BIGGER number in single-digit subtraction.",
+          "practice": [
+            {"q": "5 - 2 = ?", "a": "3", "type": "numeric"},
+            {"q": "7 - 3 = ?", "a": "4", "type": "numeric"},
+            {"q": "9 - 4 = ?", "a": "5", "type": "numeric"},
+            {"q": "8 - 5 = ?", "a": "3", "type": "numeric"},
+            {"q": "6 - 2 = ?", "a": "4", "type": "numeric"},
+            {"q": "10 - 4 = ?", "a": "6", "type": "numeric"},
+            {"q": "9 - 3 = ?", "a": "6", "type": "numeric"},
+            {"q": "8 - 6 = ?", "a": "2", "type": "numeric"},
+            {"q": "7 - 5 = ?", "a": "2", "type": "numeric"},
+            {"q": "10 - 7 = ?", "a": "3", "type": "numeric"}
+          ],
+          "quiz": [
+            {"q": "5 - 2 = ?", "options": ["2","3","4","5"], "answer": 1, "explanation": "5-2=3. Take away 2 from 5 leaves 3!"},
+            {"q": "8 - 3 = ?", "options": ["4","5","6","7"], "answer": 1, "explanation": "8-3=5!"},
+            {"q": "What does - mean?", "options": ["Add","Take away","Equals","Count"], "answer": 1, "explanation": "The minus sign means take away!"},
+            {"q": "10 - 4 = ?", "options": ["5","6","7","8"], "answer": 1, "explanation": "10-4=6!"},
+            {"q": "9 - 6 = ?", "options": ["2","3","4","5"], "answer": 1, "explanation": "9-6=3!"}
+          ]
+        },
+        {"day": 2, "subtopic": "Count-back strategy", "script": "Subtract by counting backwards.", "practice": [{"q":"8-2=?","a":"6","type":"numeric"},{"q":"9-3=?","a":"6","type":"numeric"},{"q":"7-2=?","a":"5","type":"numeric"},{"q":"6-3=?","a":"3","type":"numeric"},{"q":"10-2=?","a":"8","type":"numeric"},{"q":"8-3=?","a":"5","type":"numeric"},{"q":"9-4=?","a":"5","type":"numeric"},{"q":"7-3=?","a":"4","type":"numeric"},{"q":"10-3=?","a":"7","type":"numeric"},{"q":"5-3=?","a":"2","type":"numeric"}], "quiz": [{"q":"9-3=?","options":["5","6","7","8"],"answer":1,"explanation":"Count back 3 from 9: 8,7,6!"},{"q":"8-2=?","options":["5","6","7","8"],"answer":1,"explanation":"Count back 2 from 8: 7,6!"},{"q":"7-3=?","options":["3","4","5","6"],"answer":1,"explanation":"Count back 3 from 7: 6,5,4!"},{"q":"10-3=?","options":["6","7","8","9"],"answer":1,"explanation":"Count back 3 from 10: 9,8,7!"},{"q":"6-2=?","options":["3","4","5","6"],"answer":1,"explanation":"Count back 2 from 6: 5,4!"}]},
+        {"day": 3, "subtopic": "Subtraction facts", "script": "Learn subtraction facts by heart.", "practice": [{"q":"10-5=?","a":"5","type":"numeric"},{"q":"10-6=?","a":"4","type":"numeric"},{"q":"10-7=?","a":"3","type":"numeric"},{"q":"10-8=?","a":"2","type":"numeric"},{"q":"10-9=?","a":"1","type":"numeric"},{"q":"9-5=?","a":"4","type":"numeric"},{"q":"8-4=?","a":"4","type":"numeric"},{"q":"7-4=?","a":"3","type":"numeric"},{"q":"6-3=?","a":"3","type":"numeric"},{"q":"5-1=?","a":"4","type":"numeric"}], "quiz": [{"q":"10-5=?","options":["4","5","6","7"],"answer":1,"explanation":"10-5=5!"},{"q":"9-4=?","options":["4","5","6","7"],"answer":1,"explanation":"9-4=5!"},{"q":"8-3=?","options":["4","5","6","7"],"answer":1,"explanation":"8-3=5!"},{"q":"7-2=?","options":["4","5","6","7"],"answer":1,"explanation":"7-2=5!"},{"q":"10-7=?","options":["2","3","4","5"],"answer":1,"explanation":"10-7=3!"}]},
+        {"day": 4, "subtopic": "Word problems", "script": "Solve take-away word problems.", "practice": [{"q":"Priya has 9 sweets. She eats 3. How many left?","a":"6","type":"numeric"},{"q":"10 birds on tree. 4 fly away. How many left?","a":"6","type":"numeric"},{"q":"8-5=?","a":"3","type":"numeric"},{"q":"7 books minus 2 books = ?","a":"5","type":"numeric"},{"q":"9-7=?","a":"2","type":"numeric"},{"q":"6 mangoes. Eat 4. Remaining?","a":"2","type":"numeric"},{"q":"10-6=?","a":"4","type":"numeric"},{"q":"8-4=?","a":"4","type":"numeric"},{"q":"9-6=?","a":"3","type":"numeric"},{"q":"7-6=?","a":"1","type":"numeric"}], "quiz": [{"q":"10 apples. 4 eaten. Left?","options":["5","6","7","8"],"answer":1,"explanation":"10-4=6 apples left!"},{"q":"9-3=?","options":["5","6","7","8"],"answer":1,"explanation":"9-3=6!"},{"q":"8 fish. 5 swim away. Left?","options":["2","3","4","5"],"answer":1,"explanation":"8-5=3 fish!"},{"q":"7-4=?","options":["2","3","4","5"],"answer":1,"explanation":"7-4=3!"},{"q":"6-1=?","options":["4","5","6","7"],"answer":1,"explanation":"6-1=5!"}]},
+        {"day": 5, "subtopic": "Review and assessment", "script": "Review all subtraction skills.", "practice": [{"q":"10-4=?","a":"6","type":"numeric"},{"q":"9-5=?","a":"4","type":"numeric"},{"q":"8-3=?","a":"5","type":"numeric"},{"q":"7-4=?","a":"3","type":"numeric"},{"q":"6-2=?","a":"4","type":"numeric"},{"q":"5-3=?","a":"2","type":"numeric"},{"q":"10-7=?","a":"3","type":"numeric"},{"q":"9-8=?","a":"1","type":"numeric"},{"q":"8-6=?","a":"2","type":"numeric"},{"q":"7-7=?","a":"0","type":"numeric"}], "quiz": [{"q":"10-6=?","options":["3","4","5","6"],"answer":1,"explanation":"10-6=4!"},{"q":"9-7=?","options":["1","2","3","4"],"answer":1,"explanation":"9-7=2!"},{"q":"8-5=?","options":["2","3","4","5"],"answer":1,"explanation":"8-5=3!"},{"q":"7-3=?","options":["3","4","5","6"],"answer":1,"explanation":"7-3=4!"},{"q":"6-4=?","options":["1","2","3","4"],"answer":1,"explanation":"6-4=2!"},{"q":"Neha has 8 crayons. Gives 3 to friend. Left?","options":["4","5","6","7"],"answer":1,"explanation":"8-3=5 crayons!"},{"q":"10-9=?","options":["0","1","2","3"],"answer":1,"explanation":"10-9=1!"},{"q":"5-5=?","options":["0","1","2","5"],"answer":0,"explanation":"5-5=0. Nothing left!"},{"q":"9-2=?","options":["6","7","8","9"],"answer":1,"explanation":"9-2=7!"},{"q":"8-8=?","options":["0","1","2","8"],"answer":0,"explanation":"8-8=0. All taken away!"}]}
+      ]
+    },
+    {
+      "id": "g2_m_add_carry",
+      "grade": 2,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Addition with Carrying",
+      "subtitle": "Adding 2-digit numbers",
+      "color": "#1CB0F6",
+      "icon": "add",
+      "days": [
+        {"day": 1, "subtopic": "Tens and ones place value", "script": "Hook: 35 means 3 tens and 5 ones!\n\nStep 1: Every 2-digit number has TENS and ONES. 47 = 4 tens + 7 ones. Use a tens/ones chart.\n\nStep 2: Build numbers: give child 5 tens-sticks and 6 ones-blocks = 56.\n\nStep 3: Practice decomposing numbers.\n\nPitfall: Children write digits in wrong columns. Always start from the ONES column.", "practice": [{"q":"How many tens in 45?","a":"4","type":"numeric"},{"q":"How many ones in 73?","a":"3","type":"numeric"},{"q":"3 tens + 8 ones = ?","a":"38","type":"numeric"},{"q":"How many tens in 60?","a":"6","type":"numeric"},{"q":"How many ones in 97?","a":"7","type":"numeric"},{"q":"5 tens + 2 ones = ?","a":"52","type":"numeric"},{"q":"How many tens in 83?","a":"8","type":"numeric"},{"q":"How many ones in 41?","a":"1","type":"numeric"},{"q":"7 tens + 0 ones = ?","a":"70","type":"numeric"},{"q":"9 tens + 9 ones = ?","a":"99","type":"numeric"}], "quiz": [{"q":"How many tens in 56?","options":["5","6","50","60"],"answer":0,"explanation":"56 has 5 tens and 6 ones!"},{"q":"What is 4 tens + 3 ones?","options":["7","34","43","430"],"answer":2,"explanation":"4 tens + 3 ones = 43!"},{"q":"72 has how many ones?","options":["7","2","70","20"],"answer":1,"explanation":"72 = 7 tens + 2 ones!"},{"q":"Which shows 65?","options":["6 ones+5 tens","6 tens+5 ones","56","65 ones"],"answer":1,"explanation":"65 = 6 tens + 5 ones!"},{"q":"5 tens + 9 ones = ?","options":["14","59","95","509"],"answer":1,"explanation":"5 tens + 9 ones = 59!"}]},
+        {"day": 2, "subtopic": "Addition without carrying (2-digit)", "script": "Add tens to tens, ones to ones.", "practice": [{"q":"23+14=?","a":"37","type":"numeric"},{"q":"31+25=?","a":"56","type":"numeric"},{"q":"42+17=?","a":"59","type":"numeric"},{"q":"50+30=?","a":"80","type":"numeric"},{"q":"61+28=?","a":"89","type":"numeric"},{"q":"44+43=?","a":"87","type":"numeric"},{"q":"35+24=?","a":"59","type":"numeric"},{"q":"72+16=?","a":"88","type":"numeric"},{"q":"11+68=?","a":"79","type":"numeric"},{"q":"30+59=?","a":"89","type":"numeric"}], "quiz": [{"q":"23+14=?","options":["36","37","38","39"],"answer":1,"explanation":"Ones: 3+4=7. Tens: 2+1=3. Answer: 37!"},{"q":"42+35=?","options":["76","77","78","79"],"answer":1,"explanation":"Ones: 2+5=7. Tens: 4+3=7. Answer: 77!"},{"q":"50+30=?","options":["70","80","90","100"],"answer":1,"explanation":"5 tens + 3 tens = 8 tens = 80!"},{"q":"61+28=?","options":["88","89","90","91"],"answer":1,"explanation":"Ones: 1+8=9. Tens: 6+2=8. Answer: 89!"},{"q":"33+46=?","options":["78","79","80","81"],"answer":1,"explanation":"Ones: 3+6=9. Tens: 3+4=7. Answer: 79!"}]},
+        {"day": 3, "subtopic": "Addition with carrying (ones → tens)", "script": "When ones add up to 10 or more, carry over!\n\nStep 1: 27+15. Ones: 7+5=12. Write 2, carry 1 ten.\nStep 2: Tens: 2+1+1(carried)=4. Answer: 42!\n\nPitfall: Children forget to add the carried digit.", "practice": [{"q":"27+15=?","a":"42","type":"numeric"},{"q":"38+24=?","a":"62","type":"numeric"},{"q":"46+37=?","a":"83","type":"numeric"},{"q":"55+28=?","a":"83","type":"numeric"},{"q":"67+14=?","a":"81","type":"numeric"},{"q":"49+32=?","a":"81","type":"numeric"},{"q":"58+25=?","a":"83","type":"numeric"},{"q":"36+47=?","a":"83","type":"numeric"},{"q":"29+43=?","a":"72","type":"numeric"},{"q":"48+36=?","a":"84","type":"numeric"}], "quiz": [{"q":"27+15=?","options":["41","42","43","44"],"answer":1,"explanation":"Ones: 7+5=12, write 2 carry 1. Tens: 2+1+1=4. Answer: 42!"},{"q":"38+24=?","options":["61","62","63","64"],"answer":1,"explanation":"Ones: 8+4=12, write 2 carry 1. Tens: 3+2+1=6. Answer: 62!"},{"q":"46+37=?","options":["82","83","84","85"],"answer":1,"explanation":"Ones: 6+7=13, write 3 carry 1. Tens: 4+3+1=8. Answer: 83!"},{"q":"55+28=?","options":["82","83","84","85"],"answer":1,"explanation":"Ones: 5+8=13, write 3 carry 1. Tens: 5+2+1=8. Answer: 83!"},{"q":"In carrying, the carried digit goes to which column?","options":["Ones","Tens","Hundreds","Units"],"answer":1,"explanation":"The carried digit goes to the TENS column!"}]},
+        {"day": 4, "subtopic": "Word problems with carrying", "script": "Apply carrying to story problems.", "practice": [{"q":"Neha has 28 stickers. Gets 15 more. Total?","a":"43","type":"numeric"},{"q":"37+26=?","a":"63","type":"numeric"},{"q":"Bus has 45 seats. 38 passengers board. Total?","a":"45","type":"numeric"},{"q":"48+35=?","a":"83","type":"numeric"},{"q":"Mum buys 29 apples, Dad buys 34. Total?","a":"63","type":"numeric"},{"q":"57+28=?","a":"85","type":"numeric"},{"q":"65+27=?","a":"92","type":"numeric"},{"q":"39+43=?","a":"82","type":"numeric"},{"q":"46+38=?","a":"84","type":"numeric"},{"q":"57+36=?","a":"93","type":"numeric"}], "quiz": [{"q":"26 + 37 = ?","options":["62","63","64","65"],"answer":1,"explanation":"Ones: 6+7=13, write 3 carry 1. Tens: 2+3+1=6. Answer: 63!"},{"q":"Riya reads 48 pages Monday, 35 Tuesday. Total?","options":["82","83","84","85"],"answer":1,"explanation":"48+35: Ones: 8+5=13, carry 1. Tens: 4+3+1=8. Answer: 83!"},{"q":"45+47=?","options":["91","92","93","94"],"answer":1,"explanation":"Ones: 5+7=12, carry 1. Tens: 4+4+1=9. Answer: 92!"},{"q":"56+38=?","options":["93","94","95","96"],"answer":1,"explanation":"Ones: 6+8=14, carry 1. Tens: 5+3+1=9. Answer: 94!"},{"q":"29+63=?","options":["91","92","93","94"],"answer":1,"explanation":"Ones: 9+3=12, carry 1. Tens: 2+6+1=9. Answer: 92!"}]},
+        {"day": 5, "subtopic": "Review and assessment", "script": "Review 2-digit addition with carrying.", "practice": [{"q":"29+13=?","a":"42","type":"numeric"},{"q":"47+26=?","a":"73","type":"numeric"},{"q":"58+34=?","a":"92","type":"numeric"},{"q":"36+48=?","a":"84","type":"numeric"},{"q":"67+25=?","a":"92","type":"numeric"},{"q":"45+37=?","a":"82","type":"numeric"},{"q":"56+28=?","a":"84","type":"numeric"},{"q":"39+54=?","a":"93","type":"numeric"},{"q":"48+47=?","a":"95","type":"numeric"},{"q":"29+65=?","a":"94","type":"numeric"}], "quiz": [{"q":"37+48=?","options":["84","85","86","87"],"answer":1,"explanation":"Ones: 7+8=15, carry 1. Tens: 3+4+1=8. Answer: 85!"},{"q":"56+29=?","options":["84","85","86","87"],"answer":1,"explanation":"Ones: 6+9=15, carry 1. Tens: 5+2+1=8. Answer: 85!"},{"q":"In 83+17, ones are?","options":["3+7=10","8+1=9","3+1=4","8+7=15"],"answer":0,"explanation":"Ones digit: 3+7=10. Write 0, carry 1!"},{"q":"45+55=?","options":["99","100","101","90"],"answer":1,"explanation":"Ones: 5+5=10, carry 1. Tens: 4+5+1=10. Answer: 100!"},{"q":"67+26=?","options":["92","93","94","95"],"answer":1,"explanation":"Ones: 7+6=13, carry 1. Tens: 6+2+1=9. Answer: 93!"},{"q":"School has 48 boys and 36 girls. Total?","options":["83","84","85","86"],"answer":1,"explanation":"48+36=84 students!"},{"q":"38+45=?","options":["82","83","84","85"],"answer":1,"explanation":"Ones: 8+5=13, carry 1. Tens: 3+4+1=8. Answer: 83!"},{"q":"29+64=?","options":["92","93","94","95"],"answer":1,"explanation":"Ones: 9+4=13, carry 1. Tens: 2+6+1=9. Answer: 93!"},{"q":"57+37=?","options":["93","94","95","96"],"answer":1,"explanation":"Ones: 7+7=14, carry 1. Tens: 5+3+1=9. Answer: 94!"},{"q":"46+48=?","options":["93","94","95","96"],"answer":1,"explanation":"Ones: 6+8=14, carry 1. Tens: 4+4+1=9. Answer: 94!"}]}
+      ]
+    },
+    {
+      "id": "g2_m_mult_basic",
+      "grade": 2,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Multiplication Basics",
+      "subtitle": "Tables 2, 5, and 10",
+      "color": "#1CB0F6",
+      "icon": "close",
+      "days": [
+        {"day": 1, "subtopic": "Multiplication as repeated addition", "script": "Hook: 3 bags with 4 apples each = 4+4+4 = 12 apples!\n\nStep 1: Multiplication is a shortcut for repeated addition. 3×4 means add 4 three times.\n\nStep 2: Use objects in equal groups. 2 groups of 5 = 5+5 = 10 = 2×5.\n\nPitfall: Children confuse 3×4 with 4×3. Both equal 12 — multiplication is commutative!", "practice": [{"q":"2+2+2 = 3×2 = ?","a":"6","type":"numeric"},{"q":"5+5 = 2×5 = ?","a":"10","type":"numeric"},{"q":"3+3+3+3 = 4×3 = ?","a":"12","type":"numeric"},{"q":"4+4+4 = 3×4 = ?","a":"12","type":"numeric"},{"q":"2×6 = ?","a":"12","type":"numeric"},{"q":"5×2 = ?","a":"10","type":"numeric"},{"q":"3×5 = ?","a":"15","type":"numeric"},{"q":"2×8 = ?","a":"16","type":"numeric"},{"q":"4×5 = ?","a":"20","type":"numeric"},{"q":"2×10 = ?","a":"20","type":"numeric"}], "quiz": [{"q":"3+3+3 is the same as?","options":["3×3","3+3","9×1","3-3"],"answer":0,"explanation":"3+3+3 = 3×3 = 9!"},{"q":"2×5 = ?","options":["7","10","15","20"],"answer":1,"explanation":"2×5 = 5+5 = 10!"},{"q":"4 bags with 3 apples each = ?","options":["7","10","12","14"],"answer":2,"explanation":"4×3 = 3+3+3+3 = 12!"},{"q":"3×4 equals which?","options":["4+4+4","3+3+3","4×4","3+4"],"answer":0,"explanation":"3×4 means add 4 three times: 4+4+4=12!"},{"q":"2×9 = ?","options":["11","18","20","16"],"answer":1,"explanation":"2×9 = 9+9 = 18!"}]},
+        {"day": 2, "subtopic": "Table of 2", "script": "Learn the 2 times table.", "practice": [{"q":"2×1=?","a":"2","type":"numeric"},{"q":"2×2=?","a":"4","type":"numeric"},{"q":"2×3=?","a":"6","type":"numeric"},{"q":"2×4=?","a":"8","type":"numeric"},{"q":"2×5=?","a":"10","type":"numeric"},{"q":"2×6=?","a":"12","type":"numeric"},{"q":"2×7=?","a":"14","type":"numeric"},{"q":"2×8=?","a":"16","type":"numeric"},{"q":"2×9=?","a":"18","type":"numeric"},{"q":"2×10=?","a":"20","type":"numeric"}], "quiz": [{"q":"2×7=?","options":["12","14","16","18"],"answer":1,"explanation":"2×7=14!"},{"q":"2×9=?","options":["16","18","20","22"],"answer":1,"explanation":"2×9=18!"},{"q":"2×5=?","options":["8","10","12","14"],"answer":1,"explanation":"2×5=10!"},{"q":"2×8=?","options":["14","16","18","20"],"answer":1,"explanation":"2×8=16!"},{"q":"? × 2 = 12","options":["4","5","6","7"],"answer":2,"explanation":"6×2=12!"}]},
+        {"day": 3, "subtopic": "Table of 5", "script": "Learn the 5 times table.", "practice": [{"q":"5×1=?","a":"5","type":"numeric"},{"q":"5×2=?","a":"10","type":"numeric"},{"q":"5×3=?","a":"15","type":"numeric"},{"q":"5×4=?","a":"20","type":"numeric"},{"q":"5×5=?","a":"25","type":"numeric"},{"q":"5×6=?","a":"30","type":"numeric"},{"q":"5×7=?","a":"35","type":"numeric"},{"q":"5×8=?","a":"40","type":"numeric"},{"q":"5×9=?","a":"45","type":"numeric"},{"q":"5×10=?","a":"50","type":"numeric"}], "quiz": [{"q":"5×4=?","options":["15","20","25","30"],"answer":1,"explanation":"5×4=20!"},{"q":"5×7=?","options":["30","35","40","45"],"answer":1,"explanation":"5×7=35!"},{"q":"5×9=?","options":["40","45","50","55"],"answer":1,"explanation":"5×9=45!"},{"q":"All multiples of 5 end in?","options":["0 or 5","1 or 5","0 or 2","Any digit"],"answer":0,"explanation":"Multiples of 5 always end in 0 or 5!"},{"q":"5×6=?","options":["25","30","35","40"],"answer":1,"explanation":"5×6=30!"}]},
+        {"day": 4, "subtopic": "Table of 10", "script": "Learn the 10 times table.", "practice": [{"q":"10×1=?","a":"10","type":"numeric"},{"q":"10×2=?","a":"20","type":"numeric"},{"q":"10×3=?","a":"30","type":"numeric"},{"q":"10×4=?","a":"40","type":"numeric"},{"q":"10×5=?","a":"50","type":"numeric"},{"q":"10×6=?","a":"60","type":"numeric"},{"q":"10×7=?","a":"70","type":"numeric"},{"q":"10×8=?","a":"80","type":"numeric"},{"q":"10×9=?","a":"90","type":"numeric"},{"q":"10×10=?","a":"100","type":"numeric"}], "quiz": [{"q":"10×7=?","options":["60","70","80","90"],"answer":1,"explanation":"10×7=70!"},{"q":"10×4=?","options":["30","40","50","60"],"answer":1,"explanation":"10×4=40!"},{"q":"All multiples of 10 end in?","options":["5","0","1","Any"],"answer":1,"explanation":"Multiples of 10 always end in 0!"},{"q":"10×9=?","options":["80","90","100","110"],"answer":1,"explanation":"10×9=90!"},{"q":"? × 10 = 60","options":["5","6","7","8"],"answer":1,"explanation":"6×10=60!"}]},
+        {"day": 5, "subtopic": "Review and mixed tables", "script": "Mix all three tables.", "practice": [{"q":"2×7=?","a":"14","type":"numeric"},{"q":"5×6=?","a":"30","type":"numeric"},{"q":"10×3=?","a":"30","type":"numeric"},{"q":"2×9=?","a":"18","type":"numeric"},{"q":"5×8=?","a":"40","type":"numeric"},{"q":"10×7=?","a":"70","type":"numeric"},{"q":"2×6=?","a":"12","type":"numeric"},{"q":"5×9=?","a":"45","type":"numeric"},{"q":"10×8=?","a":"80","type":"numeric"},{"q":"5×5=?","a":"25","type":"numeric"}], "quiz": [{"q":"2×8=?","options":["14","16","18","20"],"answer":1,"explanation":"2×8=16!"},{"q":"5×7=?","options":["30","35","40","45"],"answer":1,"explanation":"5×7=35!"},{"q":"10×6=?","options":["50","60","70","80"],"answer":1,"explanation":"10×6=60!"},{"q":"Which is biggest: 2×9, 5×4, 10×2?","options":["2×9=18","5×4=20","10×2=20","All equal"],"answer":3,"explanation":"5×4=20 and 10×2=20 are both equal and biggest!"},{"q":"5 boxes with 10 crayons each = ?","options":["15","25","50","55"],"answer":2,"explanation":"5×10=50 crayons!"},{"q":"2×5=?","options":["8","10","12","14"],"answer":1,"explanation":"2×5=10!"},{"q":"10×5=?","options":["15","25","50","55"],"answer":2,"explanation":"10×5=50!"},{"q":"5×3=?","options":["10","15","20","25"],"answer":1,"explanation":"5×3=15!"},{"q":"2×10=?","options":["12","20","22","200"],"answer":1,"explanation":"2×10=20!"},{"q":"? × 5 = 45","options":["7","8","9","10"],"answer":2,"explanation":"9×5=45!"}]}
+      ]
+    },
+    {
+      "id": "g3_m_div_basic",
+      "grade": 3,
+      "subject": "math",
+      "board": "CBSE",
+      "title": "Division Basics",
+      "subtitle": "Sharing equally",
+      "color": "#1CB0F6",
+      "icon": "percent",
+      "days": [
+        {"day": 1, "subtopic": "Concept of division — equal sharing", "script": "Hook: 12 sweets for 4 friends — how many each?\n\nStep 1: Division means sharing EQUALLY. 12÷4 means put 12 things into 4 equal groups.\n\nStep 2: Use objects to demonstrate. 12 coins, 4 groups → 3 each.\n\nStep 3: Write 12÷4=3. The ÷ sign means 'shared into equal groups'.\n\nPitfall: Confusing division with subtraction. Division creates EQUAL groups.", "practice": [{"q":"12÷4=?","a":"3","type":"numeric"},{"q":"10÷2=?","a":"5","type":"numeric"},{"q":"15÷3=?","a":"5","type":"numeric"},{"q":"20÷5=?","a":"4","type":"numeric"},{"q":"18÷3=?","a":"6","type":"numeric"},{"q":"16÷4=?","a":"4","type":"numeric"},{"q":"20÷4=?","a":"5","type":"numeric"},{"q":"24÷6=?","a":"4","type":"numeric"},{"q":"30÷5=?","a":"6","type":"numeric"},{"q":"18÷6=?","a":"3","type":"numeric"}], "quiz": [{"q":"12÷3=?","options":["3","4","5","6"],"answer":1,"explanation":"12÷3=4. 12 shared into 3 equal groups = 4 each!"},{"q":"20÷4=?","options":["4","5","6","7"],"answer":1,"explanation":"20÷4=5. 20 shared into 4 groups = 5 each!"},{"q":"15÷5=?","options":["2","3","4","5"],"answer":1,"explanation":"15÷5=3!"},{"q":"What does ÷ mean?","options":["Add","Subtract","Share equally","Multiply"],"answer":2,"explanation":"÷ means to share equally into groups!"},{"q":"18÷2=?","options":["7","8","9","10"],"answer":2,"explanation":"18÷2=9!"}]},
+        {"day": 2, "subtopic": "Division as repeated subtraction", "script": "Divide by repeated subtraction.", "practice": [{"q":"20÷5=?","a":"4","type":"numeric"},{"q":"18÷3=?","a":"6","type":"numeric"},{"q":"24÷4=?","a":"6","type":"numeric"},{"q":"30÷6=?","a":"5","type":"numeric"},{"q":"21÷7=?","a":"3","type":"numeric"},{"q":"28÷4=?","a":"7","type":"numeric"},{"q":"35÷5=?","a":"7","type":"numeric"},{"q":"36÷6=?","a":"6","type":"numeric"},{"q":"32÷8=?","a":"4","type":"numeric"},{"q":"45÷5=?","a":"9","type":"numeric"}], "quiz": [{"q":"24÷4=?","options":["5","6","7","8"],"answer":1,"explanation":"24÷4=6!"},{"q":"35÷5=?","options":["5","6","7","8"],"answer":2,"explanation":"35÷5=7!"},{"q":"36÷6=?","options":["5","6","7","8"],"answer":1,"explanation":"36÷6=6!"},{"q":"28÷7=?","options":["3","4","5","6"],"answer":1,"explanation":"28÷7=4!"},{"q":"45÷9=?","options":["4","5","6","7"],"answer":1,"explanation":"45÷9=5!"}]},
+        {"day": 3, "subtopic": "Division facts (linked to multiplication)", "script": "Use multiplication to find division answers.", "practice": [{"q":"5×?=25, so 25÷5=?","a":"5","type":"numeric"},{"q":"4×?=32, so 32÷4=?","a":"8","type":"numeric"},{"q":"6×?=42, so 42÷6=?","a":"7","type":"numeric"},{"q":"3×?=27, so 27÷3=?","a":"9","type":"numeric"},{"q":"7×?=56, so 56÷7=?","a":"8","type":"numeric"},{"q":"8×?=64, so 64÷8=?","a":"8","type":"numeric"},{"q":"9×?=63, so 63÷9=?","a":"7","type":"numeric"},{"q":"6×?=48, so 48÷6=?","a":"8","type":"numeric"},{"q":"7×?=49, so 49÷7=?","a":"7","type":"numeric"},{"q":"8×?=72, so 72÷8=?","a":"9","type":"numeric"}], "quiz": [{"q":"If 6×8=48, then 48÷8=?","options":["5","6","7","8"],"answer":1,"explanation":"If 6×8=48, then 48÷8=6!"},{"q":"25÷5=?","options":["4","5","6","7"],"answer":1,"explanation":"5×5=25, so 25÷5=5!"},{"q":"63÷9=?","options":["6","7","8","9"],"answer":1,"explanation":"9×7=63, so 63÷9=7!"},{"q":"If 7×8=56, then 56÷7=?","options":["6","7","8","9"],"answer":2,"explanation":"7×8=56, so 56÷7=8!"},{"q":"72÷8=?","options":["7","8","9","10"],"answer":2,"explanation":"8×9=72, so 72÷8=9!"}]},
+        {"day": 4, "subtopic": "Word problems", "script": "Apply division to real-life problems.", "practice": [{"q":"24 candies shared among 6 children. Each gets?","a":"4","type":"numeric"},{"q":"35÷7=?","a":"5","type":"numeric"},{"q":"48 books in 8 shelves equally. Books per shelf?","a":"6","type":"numeric"},{"q":"42÷6=?","a":"7","type":"numeric"},{"q":"54÷9=?","a":"6","type":"numeric"},{"q":"36 students in 4 equal groups. Students per group?","a":"9","type":"numeric"},{"q":"56÷8=?","a":"7","type":"numeric"},{"q":"63÷7=?","a":"9","type":"numeric"},{"q":"45÷5=?","a":"9","type":"numeric"},{"q":"72÷9=?","a":"8","type":"numeric"}], "quiz": [{"q":"30 mangoes shared among 5 baskets equally. Each basket gets?","options":["5","6","7","8"],"answer":1,"explanation":"30÷5=6 mangoes each!"},{"q":"56÷8=?","options":["6","7","8","9"],"answer":1,"explanation":"56÷8=7!"},{"q":"45 students in 9 rows. Students per row?","options":["4","5","6","7"],"answer":1,"explanation":"45÷9=5 students per row!"},{"q":"63÷7=?","options":["7","8","9","10"],"answer":2,"explanation":"63÷7=9!"},{"q":"If 48÷6=?, then ?=","options":["6","7","8","9"],"answer":2,"explanation":"48÷6=8!"}]},
+        {"day": 5, "subtopic": "Review and assessment", "script": "Review all division concepts.", "practice": [{"q":"24÷3=?","a":"8","type":"numeric"},{"q":"35÷5=?","a":"7","type":"numeric"},{"q":"48÷6=?","a":"8","type":"numeric"},{"q":"63÷9=?","a":"7","type":"numeric"},{"q":"56÷7=?","a":"8","type":"numeric"},{"q":"36÷4=?","a":"9","type":"numeric"},{"q":"45÷9=?","a":"5","type":"numeric"},{"q":"72÷8=?","a":"9","type":"numeric"},{"q":"42÷7=?","a":"6","type":"numeric"},{"q":"81÷9=?","a":"9","type":"numeric"}], "quiz": [{"q":"54÷6=?","options":["7","8","9","10"],"answer":2,"explanation":"54÷6=9!"},{"q":"48÷8=?","options":["5","6","7","8"],"answer":1,"explanation":"48÷8=6!"},{"q":"72÷9=?","options":["7","8","9","10"],"answer":1,"explanation":"72÷9=8!"},{"q":"63÷9=?","options":["6","7","8","9"],"answer":1,"explanation":"63÷9=7!"},{"q":"28 chocolates shared by 7 children = ?each","options":["3","4","5","6"],"answer":1,"explanation":"28÷7=4!"},{"q":"42÷6=?","options":["6","7","8","9"],"answer":1,"explanation":"42÷6=7!"},{"q":"81÷9=?","options":["8","9","10","7"],"answer":1,"explanation":"81÷9=9!"},{"q":"35÷7=?","options":["4","5","6","7"],"answer":1,"explanation":"35÷7=5!"},{"q":"56÷8=?","options":["6","7","8","9"],"answer":1,"explanation":"56÷8=7!"},{"q":"36÷9=?","options":["3","4","5","6"],"answer":1,"explanation":"36÷9=4!"}]}
+      ]
+    }
+  ]
+}
